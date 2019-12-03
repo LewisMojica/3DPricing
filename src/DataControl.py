@@ -10,30 +10,58 @@ def updatePam():
         pam = json.load(file_pam)
 
 def getPrintData():
-    def getPrinterName():
+    def nextData():
         try:
-            printer_name = input("Ingrese nombre de la impresora > ").lower()
-            print_job["printer"] = pam["printers"][printer_name]
+            inn = input("*Ingrese nombre de la impresora > ").lower()
+            print_job["printer"] = pam["printers"][inn]
         except KeyError:
-            print("La impresora <", printer_name, "> no existe, ingrese una impresora válida")
-            getPrinterName()
+            print("La impresora <", inn, "> no existe, ingrese una impresora válida")
+            nextData()
 
-    getPrinterName()
+    nextData()
             
+    print_job["description"] = input("Ingrese descripción de impresión > ")
+
+    def nextData():
+        try:
+            [hh,mm] = input("*Tiempo de impresión (format: hh:mm) > ").split(':')
+            print_job["printing time"] = int(hh) + int(mm)/60
+        except ValueError:
+            print("Formato incorrecto, ¿olvidaste poner :?")
+            nextData()
+
+    nextData()
+
+    def nextData():
+        try:
+            [hh,mm] = input("*Tiempo de trabjo (humano) (format: hh:mm) > ").split(':')
+            print_job["human time"] = int(hh) + int(mm)/60
+        except ValueError:
+            print("Formato incorrecto, ¿olvidaste poner :?")
+            nextData()
         
-    print_job["description"] = input("Ingrese descripción del trabajo > ")
+    nextData()
+
+    def nextData():
+        try:
+            print_job["material lenght"] = float(input("Ingrese los metros de filamento > "))
+        except ValueError:
+            print("Formato incorrecto. Solo números")
+            nextData()
+
+    nextData()
 
 
-    [hh,mm] = input("*Tiempo de impresión (format: hh:mm) > ").split(':')
-    print_job["printing time"] = int(hh) + int(mm)/60
+    def nextData():
+        try:
+            inn = input("Ingrese el material > ").upper()
+            print_job["material"] = pam["materials"][inn][0]
+        except KeyError:
+            print("Material inexistente")
+            nextData()
 
-    [hh,mm] = input("*Tiempo de incio de impresión, quitar soportes, etc (format: hh:mm) > ").split(':')
-    print_job["human time"] = int(hh) + int(mm)/60
+    nextData()
 
-    print_job["material lenght"] = float(input("Ingrese el los metros de filamento > "))
-
-    material = input("Ingrese el material > ").upper()
-    print_job["material"] = pam["materials"][material][0]
     print(print_job)
 
 def calculatePrice(material,printer,job):

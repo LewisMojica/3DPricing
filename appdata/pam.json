@@ -6,7 +6,7 @@
             "default consumption":1
         },
         "printer 2":{
-            "name":"",
+            "name":"printer 2",
             "operation cost":20,
             "default consumption":3
         },
@@ -17,28 +17,41 @@
         }
     },
     "materials":{
-        "PLA":[
+        "pla":[
             {
                 "name":"Geetech PLA",
                 "id":"001",
                 "lenght":332,
-                "material":"PLA",
-                "printers consumptions":[
-                    {"printer name":"Ender 3","energy consumption":1},
-                    {"printer name":"printer 2","energy consumption":5}
-                ]
+                "cost":4.82,
+                "material":"pla",
+                "printers consumptions":{
+                    "ender 3":1,
+                    "printer 2":5
+                }
+            },
+            {
+                "name":"Overture PLA",
+                "id":"003",
+                "lenght":332,
+                "cost":4.82,
+                "material":"pla",
+                "printers consumptions":{
+                    "ender 3":1,
+                    "printer 2":5
+                }
             }
         ],
-        "PETG":[
+        "petg":[
             {
                 "name":"Overture PETG",
                 "id":"002",
                 "lenght":332,
+                "cost":4.82,
                 "material":"PETG",
-                "printers consumptions":[
-                    {"printer name":"ender 3","energy consumption":1},
-                    {"printer name":"printer 2","energy consumption":5}
-                ]
+                "printers consumptions":{
+                    "ender 3":1,
+                    "printer 2":5
+                }
             }
         ]
     },
