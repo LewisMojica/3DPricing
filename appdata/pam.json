@@ -1,0 +1,47 @@
+{
+    "printers":{
+        "ender 3":{
+            "name":"ender 3",
+            "operation cost":10,
+            "default consumption":1
+        },
+        "printer 2":{
+            "name":"",
+            "operation cost":20,
+            "default consumption":3
+        },
+        "printer 3":{
+            "name":"printer 3",
+            "operation cost":40,
+            "default consumption":3
+        }
+    },
+    "materials":{
+        "PLA":[
+            {
+                "name":"Geetech PLA",
+                "id":"001",
+                "lenght":332,
+                "material":"PLA",
+                "printers consumptions":[
+                    {"printer name":"Ender 3","energy consumption":1},
+                    {"printer name":"printer 2","energy consumption":5}
+                ]
+            }
+        ],
+        "PETG":[
+            {
+                "name":"Overture PETG",
+                "id":"002",
+                "lenght":332,
+                "material":"PETG",
+                "printers consumptions":[
+                    {"printer name":"ender 3","energy consumption":1},
+                    {"printer name":"printer 2","energy consumption":5}
+                ]
+            }
+        ]
+    },
+    "human time price":200
+
+}
