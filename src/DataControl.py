@@ -6,8 +6,13 @@ pam = None
 
 def updatePam():
     global pam
-    with open('appdata/pam.json','r') as file_pam:
-        pam = json.load(file_pam)
+    try:
+        with open('appdata/pam.json','r') as file_pam:
+            pam = json.load(file_pam)
+    except FileNotFoundError:
+        with open('../appdata/pam.json','r') as file_pam:
+            pam = json.load(file_pam)
+        
 
 def getPrintData():
     def nextData():
