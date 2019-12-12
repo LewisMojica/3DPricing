@@ -32,7 +32,6 @@ CREATE TABLE "orders" (
     "net_cost" INTEGER   NOT NULL,
     "customer_cost" INTEGER   NOT NULL,
     "customer_id" INTEGER NOT NULL,
-    "filaments_ids" INTEGER NOT NULL,
     "printer_id" INTEGER NOT NULL,
     "year" INTEGER   NOT NULL,
     "month" INTEGER   NOT NULL,
