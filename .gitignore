@@ -1,3 +1,4 @@
 .vscode/
 src/__pycache__
-*.sqlite3
+database.sqlite3
+database.sqlite3-journal
