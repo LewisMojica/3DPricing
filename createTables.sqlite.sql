@@ -22,6 +22,7 @@ CREATE TABLE "materials_consumptions" (
     "consumption" INTEGER   NOT NULL,
     "material_name" VARCHAR(10) NOT NULL,
     "printer_id" INTEGER NOT NULL,
+    UNIQUE (material_name,printer_id),
     FOREIGN KEY(printer_id) REFERENCES printers(id),
     FOREIGN KEY(material_name) REFERENCES materials(name)
 );
