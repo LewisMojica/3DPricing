@@ -1,21 +1,22 @@
 import sqlite3
 
+sql_script = None
 con_db = sqlite3.connect('database.sqlite3')
 
-def createDB():
-    '''Esta función crear la base de datos y las tablas.'''
+
+
+def getCreateScript():
+    ''' retorna los los comandos a ejecutar para crear las tablas'''
+    with open('createTables.sqlite.script', 'r') as file:
+        data = file.read().split(';')
+    return data
+
+def createTables():
+    '''Esta función crea la base de datos y las tablas.'''
+    sql_script = getCreateScript()
     try:
-        con_db.execute('CREATE TABLE printers(id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(42), depracation INTERGER,\
-                    default_consumption INTERGER NOT NULL)')
-
-        con_db.execute('CREATE TABLE filaments(id INTERGER PRIMARY KEY, material VARCHAR(6) NOT NULL,\
-                    length INTERGER NOT NULL, name VARCHAR(42) NOT NULL, cost INTEGER NOT NULL, actual_length INTEGER)')
-        
-        con_db.execute('CREATE TABLE printers_consumption_by_material(printer_id INTEGER PRIMARY KEY)')
-        
-        con_db.execute('CREATE TABLE print_history(id INTERGER PRIMARY KEY, filament INTEGER NOT NULL,\
-                    net_cost INTEGER NOT NULL, client_cost INTEGER NOT NULL)')
-
+        for iter in sql_script:
+            con_db.execute(iter)
         print('tabla creada')
     except sqlite3.OperationalError:
         print('tabla ya existe')
@@ -33,5 +34,14 @@ class Add:
     def material(name):
         '''agrega nuevo material a base de datos'''
         cursor_db = con_db.cursor()
-        cursor_db.execute('ALTER TABLE printers_consumption_by_material ADD COLUMN ' + name + ' INTEGER')
+        cursor_db.execute('ALTER TABLE printers_consumption_by_material ADD COLUMN ' + name.lower() + ' INTEGER')
         con_db.commit()
+
+    def filament(name, material, length, cost):
+        '''agrega nuevo filamento a base de datos'''
+        cursor_db = con_db.cursor()
+        cursor_db.execute('INSERT INTO filaments (name, )')
+        con_db.commit()
+
+for iter in getCreateScript():
+    con_db.execute(iter)
