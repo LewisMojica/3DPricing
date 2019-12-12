@@ -24,24 +24,23 @@ def createTables():
 
 class Add:
     '''Esta clase contiene funciones para agregar impresora, filamentor e impresiones a la base de datos'''
-    def printer(name, depracation, default_consumption):
+    def printer(name, depracation):
         '''agrega nueva impresora a base de datos'''
         cursor_db = con_db.cursor()
-        cursor_db.execute('INSERT INTO printers (name, depracation, default_consumption) VALUES (?,?,?)', (name, depracation, default_consumption))
+        cursor_db.execute('INSERT INTO printers (name, depracation) VALUES ("{}",{})'.format(name,str(depracation)))
         con_db.commit()
         cursor_db.close()
 
     def material(name):
         '''agrega nuevo material a base de datos'''
         cursor_db = con_db.cursor()
-        cursor_db.execute('ALTER TABLE printers_consumption_by_material ADD COLUMN ' + name.lower() + ' INTEGER')
+        cursor_db.execute('INSERT INTO materials (name) VALUES ("{}")'.format(name))
         con_db.commit()
+        cursor_db.close()
 
-    def filament(name, material, length, cost):
+    def filament(name, material, total_cost, length, actual_length='NULL'):
         '''agrega nuevo filamento a base de datos'''
         cursor_db = con_db.cursor()
-        cursor_db.execute('INSERT INTO filaments (name, )')
+        cursor_db.execute('INSERT INTO filaments (name, material_name, total_cost, length, actual_length) VALUES("{}","{}",{},{},{})'.format(name,material,total_cost,length,actual_length))
         con_db.commit()
-
-for iter in getCreateScript():
-    con_db.execute(iter)
+        cursor_db.close()
