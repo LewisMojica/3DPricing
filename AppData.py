@@ -1,8 +1,6 @@
 import sqlite3
 
-sql_script = None
 con_db = sqlite3.connect('database.sqlite3')
-
 
 
 def getCreateScript():
@@ -20,27 +18,29 @@ def createTables():
         print('tabla creada')
     except sqlite3.OperationalError:
         print('tabla ya existe')
+def getCursor():
+    return con_db.execute('PRAGMA foreign_keys = ON;')
 
 
 class Add:
     '''Esta clase contiene funciones para agregar impresora, filamentor e impresiones a la base de datos'''
     def printer(name, depracation):
         '''agrega nueva impresora a base de datos'''
-        cursor_db = con_db.cursor()
+        cursor_db = getCursor()
         cursor_db.execute('INSERT INTO printers (name, depracation) VALUES ("{}",{})'.format(name,str(depracation)))
         con_db.commit()
         cursor_db.close()
 
     def material(name):
         '''agrega nuevo material a base de datos'''
-        cursor_db = con_db.cursor()
+        cursor_db = getCursor()
         cursor_db.execute('INSERT INTO materials (name) VALUES ("{}")'.format(name))
         con_db.commit()
         cursor_db.close()
 
     def filament(name, material, total_cost, length, actual_length='NULL'):
         '''agrega nuevo filamento a base de datos'''
-        cursor_db = con_db.cursor()
+        cursor_db = getCursor()
         cursor_db.execute('INSERT INTO filaments (name, material_name, total_cost, length, actual_length)\
              VALUES("{}","{}",{},{},{})'.format(name,material,total_cost,length,actual_length))
         con_db.commit()
@@ -48,8 +48,16 @@ class Add:
 
     def customer(name, last_name, phone_number='NULL'):
         '''agrega nuevo cliente a base de datos'''
-        cursor_db = con_db.cursor()
+        cursor_db = getCursor()
         cursor_db.execute('INSERT INTO customers (name, last_name, phone_number) VALUES("{}","{}",{})'\
             .format(name,last_name,phone_number))
+        con_db.commit()
+        cursor_db.close()
+
+    def material_consumption(material_name, printer_id, consumption):
+        '''agrega informacion de consumo sobre material en cierta impresora a base de datos'''
+        cursor_db = getCursor()
+        cursor_db.execute('INSERT INTO materials_consumptions (material_name, printer_id, consumption) VALUES("{}",{},{})'\
+            .format(material_name,printer_id,consumption))
         con_db.commit()
         cursor_db.close()
