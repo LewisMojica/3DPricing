@@ -41,6 +41,15 @@ class Add:
     def filament(name, material, total_cost, length, actual_length='NULL'):
         '''agrega nuevo filamento a base de datos'''
         cursor_db = con_db.cursor()
-        cursor_db.execute('INSERT INTO filaments (name, material_name, total_cost, length, actual_length) VALUES("{}","{}",{},{},{})'.format(name,material,total_cost,length,actual_length))
+        cursor_db.execute('INSERT INTO filaments (name, material_name, total_cost, length, actual_length)\
+             VALUES("{}","{}",{},{},{})'.format(name,material,total_cost,length,actual_length))
+        con_db.commit()
+        cursor_db.close()
+
+    def customer(name, last_name, phone_number='NULL'):
+        '''agrega nuevo cliente a base de datos'''
+        cursor_db = con_db.cursor()
+        cursor_db.execute('INSERT INTO customers (name, last_name, phone_number) VALUES("{}","{}",{})'\
+            .format(name,last_name,phone_number))
         con_db.commit()
         cursor_db.close()
