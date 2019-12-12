@@ -1,4 +1,5 @@
 import sqlite3
+import time
 
 con_db = sqlite3.connect('database.sqlite3')
 
@@ -55,9 +56,17 @@ class Add:
         cursor_db.close()
 
     def material_consumption(material_name, printer_id, consumption):
-        '''agrega informacion de consumo sobre material en cierta impresora a base de datos'''
+        '''agrega información de consumo sobre material en cierta impresora a base de datos'''
         cursor_db = getCursor()
         cursor_db.execute('INSERT INTO materials_consumptions (material_name, printer_id, consumption) VALUES("{}",{},{})'\
             .format(material_name,printer_id,consumption))
+        con_db.commit()
+        cursor_db.close()
+
+    def order(customer_id, printer_id, net_cost, customer_cost, description='NULL'):
+        '''agrega nueva orden a base de datos'''
+        cursor_db = getCursor()
+        cursor_db.execute('INSERT INTO orders (customer_id, printer_id, net_cost, customer_cost, description, unix_time) VALUES({},{},{},{},"{}",{})'\
+            .format(customer_id, printer_id, net_cost, customer_cost, description, int(time.time())))
         con_db.commit()
         cursor_db.close()
