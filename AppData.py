@@ -7,7 +7,7 @@ con_db = sqlite3.connect('database.sqlite3')
 
 def getCreateScript():
     ''' retorna los los comandos a ejecutar para crear las tablas'''
-    with open('createTables.sqlite.script', 'r') as file:
+    with open('createTables.sqlite.sql', 'r') as file:
         data = file.read().split(';')
     return data
 
