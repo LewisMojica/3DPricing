@@ -29,7 +29,6 @@ CREATE TABLE "materials_consumptions" (
 CREATE TABLE "orders" (
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "description" TEXT,
-    "filament" INTEGER   NOT NULL,
     "net_cost" INTEGER   NOT NULL,
     "customer_cost" INTEGER   NOT NULL,
     "customer_id" INTEGER NOT NULL,
