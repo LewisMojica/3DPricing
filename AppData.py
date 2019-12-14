@@ -11,14 +11,24 @@ def getCreateScript():
     return data
 
 def createTables():
-    '''Esta función crea la base de datos y las tablas.'''
+    '''Esta función crea la base de datos y las tablas.
+    Retorna un 0 si se crean las tablas.
+    Retorna 1 si previamente existían tablas pero hay no hay 8 tablas
+    Retorna 2 previamente existían existen 8 tablas creadas'''
     sql_script = getCreateScript()
-    try:
+    cursor = getCursor()
+    tables_list = list(cursor.execute('SELECT name FROM sqlite_master WHERE type="table" ORDER BY name'))
+    tables_count = len(tables_list)
+
+    if tables_count == 0:
         for iter in sql_script:
             con_db.execute(iter)
-        print('tabla creada')
-    except sqlite3.OperationalError:
-        print('tabla ya existe')
+        return 0
+    elif tables_count == 8:
+        return 2
+    else:
+        return 1
+
 def getCursor():
     return con_db.execute('PRAGMA foreign_keys = ON;')
 
@@ -68,5 +78,13 @@ class Add:
         cursor_db = getCursor()
         cursor_db.execute('INSERT INTO orders (customer_id, printer_id, net_cost, customer_cost, description, unix_time) VALUES({},{},{},{},"{}",{})'\
             .format(customer_id, printer_id, net_cost, customer_cost, description, int(time.time())))
+        con_db.commit()
+        cursor_db.close()
+
+    def filament_order(filament_id,order_id,length):
+        '''agrega consumo de filamente a orden en base de datos'''
+        cursor_db = getCursor()
+        cursor_db.execute('INSERT INTO filament_order (filament_id,order_id,length) VALUES({},{},{})'\
+            .format(filament_id,order_id,length))
         con_db.commit()
         cursor_db.close()

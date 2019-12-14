@@ -47,7 +47,7 @@ CREATE TABLE "customers" (
     "phone_number" INTEGER
 );
 
-CREATE TABLE "filaments_orders" (
+CREATE TABLE "filament_order" (
     "filament_id" INTEGER   NOT NULL,
     "order_id" INTEGER NOT NULL,
     "length" INTEGER NOT NULL,
@@ -55,3 +55,5 @@ CREATE TABLE "filaments_orders" (
     FOREIGN KEY(order_id) REFERENCES orders(id),
     FOREIGN KEY(filament_id) REFERENCES filaments(id)
 );
+
+INSERT INTO printers (name, depracation) VALUES ("human",200);
