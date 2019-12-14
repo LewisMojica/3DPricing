@@ -23,8 +23,9 @@ def createTables():
     if tables_count == 0:
         for iter in sql_script:
             con_db.execute(iter)
+#            print(iter)
         return 0
-    elif tables_count == 8:
+    elif tables_count == 9:
         return 2
     else:
         return 1
@@ -86,5 +87,14 @@ class Add:
         cursor_db = getCursor()
         cursor_db.execute('INSERT INTO filament_order (filament_id,order_id,length) VALUES({},{},{})'\
             .format(filament_id,order_id,length))
+        con_db.commit()
+        cursor_db.close()
+
+    def human_labor(order_id, slicing,print_removal=0, support_removal=0, filament_change=0, tool_change=0):
+        '''agrega horas de trabajo (humano) de una cierta orden a la base de datos'''
+        cursor_db = getCursor()
+        cursor_db.execute('INSERT INTO human_time (order_id, slicing,print_removal, support_removal, \
+                        filament_change, tool_change) VALUES({},{},{},{},{},{})'.format(order_id, slicing,print_removal,\
+                                                                    support_removal,filament_change, tool_change))
         con_db.commit()
         cursor_db.close()

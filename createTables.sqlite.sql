@@ -51,9 +51,27 @@ CREATE TABLE "filament_order" (
     "filament_id" INTEGER   NOT NULL,
     "order_id" INTEGER NOT NULL,
     "length" INTEGER NOT NULL,
+    "printing_time" INTEGER NOT NULL,
     UNIQUE (filament_id,order_id),
     FOREIGN KEY(order_id) REFERENCES orders(id),
     FOREIGN KEY(filament_id) REFERENCES filaments(id)
 );
 
+CREATE TABLE "human_time" (
+    "order_id" INTEGER NOT NULL,
+    "support_removal" INTEGER NOT NULL,
+    "slicing" INTEGER NOT NULL,
+    "print_removal" INTEGER NOT NULL,
+    "filament_change" INTEGER NOT NULL,
+    "tool_change" INTEGER NOT NULL,
+    UNIQUE (order_id),
+    FOREIGN KEY(order_id) REFERENCES orders(id)
+);
+
 INSERT INTO printers (name, depracation) VALUES ("human",200);
+INSERT INTO materials (name) VALUES ("pla");
+INSERT INTO materials (name) VALUES ("petg");
+INSERT INTO materials (name) VALUES ("abs");
+INSERT INTO materials (name) VALUES ("tpu");
+INSERT INTO customers (name) VALUES ("GENERIC");
+COMMIT
