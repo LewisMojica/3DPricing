@@ -101,3 +101,15 @@ class Add:
                                                                     support_removal,filament_change, tool_change))
         con_db.commit()
         cursor_db.close()
+
+    def getMaterialsName(self):
+        '''retorna un tuple con los nombres de los materiales creados'''
+        cursor_db = self.getCursor()
+        result = ()
+        for iter in cursor_db.execute('SELECT name FROM materials'):
+            result += iter
+        cursor_db.close()
+        return result
+
+a = Add()
+print(a.getMaterialsName())

@@ -1,5 +1,7 @@
 <RCC>
   <qresource prefix="icons">
+    <file>icons/mas.png</file>
+    <file>icons/borrar.png</file>
     <file>icons/casa.png</file>
     <file>icons/etiqueta-del-precio.png</file>
     <file>icons/inventario.png</file>
