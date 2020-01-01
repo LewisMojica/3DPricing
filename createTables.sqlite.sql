@@ -1,13 +1,14 @@
 CREATE TABLE "printers" (
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "name" VARCHAR(42)   NOT NULL,
-    "depracation" INTEGER   NOT NULL
+    "depracation" REAL   NOT NULL
 );
 
 CREATE TABLE "filaments" (
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "name" VARCHAR(42)   NOT NULL,
-    "total_cost" INTEGER   NOT NULL,
+    "color" VARCHAR(15),
+    "total_cost" REAL   NOT NULL,
     "length" INTEGER   NOT NULL,
     "actual_length" INTEGER,
     "material_name" VARCHAR(10)   NOT NULL,
@@ -19,9 +20,10 @@ CREATE TABLE "materials" (
 );
 
 CREATE TABLE "materials_consumptions" (
-    "consumption" INTEGER   NOT NULL,
+    "consumption" REAL   NOT NULL,
     "material_name" VARCHAR(10) NOT NULL,
     "printer_id" INTEGER NOT NULL,
+    UNIQUE (material_name,printer_id),
     FOREIGN KEY(printer_id) REFERENCES printers(id),
     FOREIGN KEY(material_name) REFERENCES materials(name)
 );
@@ -29,15 +31,11 @@ CREATE TABLE "materials_consumptions" (
 CREATE TABLE "orders" (
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "description" TEXT,
-    "net_cost" INTEGER   NOT NULL,
-    "customer_cost" INTEGER   NOT NULL,
+    "net_cost" REAL   NOT NULL,
+    "customer_cost" REAL   NOT NULL,
     "customer_id" INTEGER NOT NULL,
     "printer_id" INTEGER NOT NULL,
-    "year" INTEGER   NOT NULL,
-    "month" INTEGER   NOT NULL,
-    "day" INTEGER   NOT NULL,
-    "hour" INTEGER   NOT NULL,
-    "second" INTEGER   NOT NULL,
+    "unix_time" INTEGER   NOT NULL,
     FOREIGN KEY(customer_id) REFERENCES customers(id),
     FOREIGN KEY(printer_id) REFERENCES printers(id)
 );
@@ -49,10 +47,31 @@ CREATE TABLE "customers" (
     "phone_number" INTEGER
 );
 
-CREATE TABLE "filaments_orders" (
+CREATE TABLE "filament_order" (
     "filament_id" INTEGER   NOT NULL,
     "order_id" INTEGER NOT NULL,
     "length" INTEGER NOT NULL,
+    "printing_time" INTEGER NOT NULL,
+    UNIQUE (filament_id,order_id),
     FOREIGN KEY(order_id) REFERENCES orders(id),
     FOREIGN KEY(filament_id) REFERENCES filaments(id)
-)
+);
+
+CREATE TABLE "human_time" (
+    "order_id" INTEGER NOT NULL,
+    "support_removal" INTEGER NOT NULL,
+    "slicing" INTEGER NOT NULL,
+    "print_removal" INTEGER NOT NULL,
+    "filament_change" INTEGER NOT NULL,
+    "tool_change" INTEGER NOT NULL,
+    UNIQUE (order_id),
+    FOREIGN KEY(order_id) REFERENCES orders(id)
+);
+
+INSERT INTO printers (name, depracation) VALUES ("human",200);
+INSERT INTO materials (name) VALUES ("pla");
+INSERT INTO materials (name) VALUES ("petg");
+INSERT INTO materials (name) VALUES ("abs");
+INSERT INTO materials (name) VALUES ("tpu");
+INSERT INTO customers (name) VALUES ("GENERIC");
+COMMIT
