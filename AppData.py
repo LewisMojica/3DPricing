@@ -111,5 +111,73 @@ class Add:
         cursor_db.close()
         return result
 
-a = Add()
-print(a.getMaterialsName())
+    def getPrintersName(self):
+        '''retorna un tuple con los nombres de los impresoras existentes'''
+        cursor_db = self.getCursor()
+        result = ()
+        for iter in cursor_db.execute('SELECT name FROM printers'):
+            result += iter
+        cursor_db.close()
+        return result[1:]
+
+    def getCustomersName(self):
+        '''retorna un tuple con los nombres de los clientes existentes'''
+        cursor_db = self.getCursor()
+        result = ()
+        for iter in cursor_db.execute('SELECT name FROM customers'):
+            result += iter
+        cursor_db.close()
+        return result
+
+    def getFilamentsID(self,material='*'):
+        '''retorna un tuple con los nombres de los clientes existentes'''
+        cursor_db = self.getCursor()
+        result = ()
+        for iter in cursor_db.execute('SELECT id FROM filaments WHERE material_name="{}"'.format(material)):
+            result += iter
+        cursor_db.close()
+        return result
+
+    def getFilamentsName(self,ids):
+        '''retorna un tuple con los nombres los carretes que correspondes a los IDs especificados'''
+        cursor_db = self.getCursor()
+        if type(ids) == int:
+            ids = (ids,ids)
+
+        if ids == ():
+            return ()
+        result = ()
+        command = 'SELECT name FROM filaments WHERE'
+        for iter in ids:
+            command += 'OR id={} '.format(iter)
+
+        for iter in cursor_db.execute(command.replace('OR','',1)):
+            result += iter
+        cursor_db.close()
+        return result
+
+    def getPrinterDepracation(self,id):
+        '''retorna el consumo de la impresora especificada'''
+        cursor_db = self.getCursor()
+        result = 0
+        for iter in cursor_db.execute('SELECT depracation FROM printers WHERE id="{}"'.format(id)):
+            result = iter
+        cursor_db.close()
+        result = result[0]
+        return result
+    
+    def getFilamentCostPerGram (self,id):
+        '''retorna el precio de cada gramo del filamento especificado'''
+        cursor_db = self.getCursor()
+        result = ()
+        tup = ()
+        for iter in cursor_db.execute('SELECT total_cost,length FROM filaments WHERE id="{}"'.format(id)):
+            tup += iter
+        cursor_db.close()
+        result = tup[0]/tup[1]
+        return result
+
+    def getHumanTimeCost(self):
+        '''retorna el costo por hora de la persona'''
+        
+        return self.getPrinterDepracation(1)

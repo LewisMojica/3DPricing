@@ -9,6 +9,23 @@ class Window(Ui_MainWindow):
     def setupUi(self, MainWindow):
         self.data = AppData.Add()
         super().setupUi(MainWindow)
+
+        self.add_item_text_fields = (self.nameLineEdit_3,self.lastNameLineEdit,self.phoneNumberLineEdit,\
+            self.nameLineEdit,self.spinBox,\
+                self.nameLineEdit_2,self.materialComboBox_3,self.costoDelCarreteSpinBox,self.spinBox_2,self.spinBox_3,\
+                    self.materialComboBox_3,self.prippComboBox,self.materialComboBox,self.customers_comboBox)
+
+        
+        self.connect_all()
+
+        self.items_to_add = ('Impresora','Carrete','Cliente')
+
+        self.listWidget_SelectNewItem.insertItems(0,self.items_to_add)
+
+        self.refreshUI()
+
+    def connect_all(self):
+        '''conecta todas las signals con sus slots'''
         self.but_new_order.clicked.connect(self.swTo_NewOrder)
 
         self.listWidget_SelectNewItem.currentRowChanged.connect(self.select_add)
@@ -17,20 +34,47 @@ class Window(Ui_MainWindow):
         self.but_return_to_start_2.clicked.connect(self.swTo_Start)
 
         self.but_add.clicked.connect(self.addItem)
-
+        self.pushButton_2.clicked.connect(self.createOrder)
         self.but_add_item.clicked.connect(self.swTo_AddItem)
-        self.stackedWidget.setCurrentIndex(0)
-        self.stackedWidget_2.setCurrentIndex(0)
+        
+        self.materialComboBox.currentTextChanged.connect(self.updateFilaments)
+
+        self.spinBox_7.valueChanged.connect(self.updateClientCost)
+        self.spinBox_8.valueChanged.connect(self.updateNetProfitMargin)
+    
+        self.prippComboBox.currentIndexChanged.connect(self.updateFabricationCost)
+        self.filament_comboBox.currentIndexChanged.connect(self.updateFabricationCost)
+        self.customers_comboBox.currentIndexChanged.connect(self.updateFabricationCost)
+        self.spinBox_5.valueChanged.connect(self.updateFabricationCost)
+        self.spinBox_4.valueChanged.connect(self.updateFabricationCost)
+        self.spinBox_6.valueChanged.connect(self.updateFabricationCost)
+        self.removerLaImpresiNSpinBox.valueChanged.connect(self.updateFabricationCost)
+        self.iniciarImpresiNSpinBox.valueChanged.connect(self.updateFabricationCost)
+        self.cambioDeFilamentoYHerramientasSpinBox.valueChanged.connect(self.updateFabricationCost)
+        self.removerImpresiNSpinBox.valueChanged.connect(self.updateFabricationCost)
+        self.spinBox_9.valueChanged.connect(self.updateFabricationCost)
         
 
+    def refreshUI(self, index=0):
+
+        for iter in self.add_item_text_fields:
+            iter.clear()
+        
         self.materialComboBox_3.insertItems(0,self.data.getMaterialsName())
+        self.prippComboBox.insertItems(0,self.data.getPrintersName())
+        self.materialComboBox.insertItems(0,self.data.getMaterialsName())
+        self.customers_comboBox.insertItems(0,self.data.getCustomersName())
+        self.updateFilaments()
+        self.stackedWidget.setCurrentIndex(index)
 
-        self.items_to_add = ('Impresora','Carrete','Cliente')
+    def updateFilaments(self,i=0,e=0):
+        self.filament_comboBox.clear()
 
-        self.listWidget_SelectNewItem.insertItems(0,self.items_to_add)
+        ids = self.data.getFilamentsID(self.materialComboBox.currentText())
+        self.filament_comboBox.insertItems(0,self.data.getFilamentsName(ids))
 
 
-
+        
     def select_add(self, i):
         self.stackedWidget_2.setCurrentIndex(i + 1)
 
@@ -56,11 +100,69 @@ class Window(Ui_MainWindow):
             actual_grams = self.spinBox_3.value()
             if len(name.replace(' ','')) > 0:
                 self.data.filament(name,material,cost,grams,actual_grams)
+                self.refreshUI(self.stackedWidget.currentIndex())
         elif current_item == 'Impresora':
             name = self.nameLineEdit.text().strip()
             consumption = self.spinBox.value()
             if len(name.replace(' ','')) > 0:
                 self.data.printer(name,consumption)
+                self.refreshUI(self.stackedWidget.currentIndex())
+        elif current_item == 'Cliente':
+            name = self.nameLineEdit_3.text().strip()
+            last_name = self.lastNameLineEdit.text().strip().lower()
+            phone_number = self.phoneNumberLineEdit.text().replace(' ', '').replace('-','')
+            self.data.customer(name, last_name, phone_number)
+            self.refreshUI(self.stackedWidget.currentIndex())
+
+    def updateFabricationCost(self,*args):
+        human_time = (self.removerLaImpresiNSpinBox.value() + self.iniciarImpresiNSpinBox.value() +\
+            self.cambioDeFilamentoYHerramientasSpinBox.value() + self.removerImpresiNSpinBox.value() +\
+            self.spinBox_9.value())/60
+        printing_time = self.spinBox_5.value() + self.spinBox_4.value()/60
+        grams_of_material = self.spinBox_6.value()
+        printer_depracation = self.data.getPrinterDepracation(self.prippComboBox.currentIndex()+2)
+        cost_per_gram = 0
+        fabrication_cost = 0
+        try:
+            cost_per_gram = self.data.getFilamentCostPerGram(dict(zip(self.data.getFilamentsName(self.data.getFilamentsID(self.materialComboBox.currentText())),self.data.getFilamentsID(self.materialComboBox.currentText())))[self.filament_comboBox.currentText()])
+        except:
+            pass
+        fabrication_cost = (human_time)*(self.data.getHumanTimeCost()) + printing_time*printer_depracation + grams_of_material*cost_per_gram
+        self.frabricationCost_label_7.setText('$ {}'.format(round(fabrication_cost,2)))
+        self.updateClientCost()
+
+    def getOrderInfo(self):
+        customer_id = self.customers_comboBox.currentIndex()+1
+        printer_id = self.prippComboBox.currentIndex()+2
+        net_cost = float(self.frabricationCost_label_7.text().replace('$',''))
+        customer_cost = self.spinBox_8.value()
+        description = self.textEdit.toPlainText()
+        return (customer_id,printer_id,net_cost,customer_cost,description)
+    
+    def getHumanLaborInfo(self):
+        pass
+    def createOrder(self):
+        self.data.order(*self.getOrderInfo())
+        
+
+    def updateClientCost(self):
+        self.spinBox_8.blockSignals(True)
+        fabrication_cost = float(self.frabricationCost_label_7.text().replace('$',''))
+        self.spinBox_8.setValue(fabrication_cost*self.spinBox_7.value()/100 + fabrication_cost)
+        self.spinBox_8.blockSignals(False)
+        self.getOrderInfo()
+
+    def updateNetProfitMargin(self,i=None,e=None):
+        self.spinBox_7.blockSignals(True)
+        fabrication_cost = float(self.frabricationCost_label_7.text().replace('$',''))
+
+        if(fabrication_cost != 0):
+            net_profit = (self.spinBox_8.value()/fabrication_cost -1)*100
+            self.spinBox_7.setValue(net_profit)
+        self.spinBox_7.blockSignals(False)
+
+
+
 
 def main():
     app = QApplication([])
