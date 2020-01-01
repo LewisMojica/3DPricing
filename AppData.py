@@ -78,18 +78,21 @@ class Add:
         cursor_db.close()
 
     def order(self, customer_id, printer_id, net_cost, customer_cost, description='NULL'):
-        '''agrega nueva orden a base de datos'''
+        '''agrega nueva orden a base de datos y retorna el id de la orden creada'''
         cursor_db = self.getCursor()
         cursor_db.execute('INSERT INTO orders (customer_id, printer_id, net_cost, customer_cost, description, unix_time) VALUES({},{},{},{},"{}",{})'\
             .format(customer_id, printer_id, net_cost, customer_cost, description, int(time.time())))
+        
+        order_id = tuple(cursor_db.execute('SELECT last_insert_rowid()'))[0][0]
         con_db.commit()
         cursor_db.close()
+        return order_id
 
-    def filament_order(self, filament_id,order_id,length):
+    def filament_order(self, filament_id,order_id,length,printing_time):
         '''agrega consumo de filamente a orden en base de datos'''
         cursor_db = self.getCursor()
-        cursor_db.execute('INSERT INTO filament_order (filament_id,order_id,length) VALUES({},{},{})'\
-            .format(filament_id,order_id,length))
+        cursor_db.execute('INSERT INTO filament_order (filament_id,order_id,length,printing_time) VALUES({},{},{},{})'\
+            .format(filament_id,order_id,length,printing_time))
         con_db.commit()
         cursor_db.close()
 
