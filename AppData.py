@@ -7,6 +7,7 @@ class Add:
     def __init__(self, database_name='database.sqlite3'):
         global con_db
         con_db = sqlite3.connect(database_name)
+        self.createTables()
 
 
     def getCreateScript(self):
