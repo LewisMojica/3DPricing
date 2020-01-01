@@ -15,7 +15,7 @@ class Window(Ui_MainWindow):
                 self.nameLineEdit_2,self.materialComboBox_3,self.costoDelCarreteSpinBox,self.spinBox_2,self.spinBox_3,\
                     self.materialComboBox_3,self.prippComboBox,self.materialComboBox,self.customers_comboBox)
 
-        
+        self.last_order = None
         self.connect_all()
 
         self.items_to_add = ('Impresora','Carrete','Cliente')
@@ -34,7 +34,7 @@ class Window(Ui_MainWindow):
         self.but_return_to_start_2.clicked.connect(self.swTo_Start)
 
         self.but_add.clicked.connect(self.addItem)
-        self.pushButton_2.clicked.connect(self.createOrder)
+        self.pushButton_2.clicked.connect(self.createWholeOrder)
         self.but_add_item.clicked.connect(self.swTo_AddItem)
         
         self.materialComboBox.currentTextChanged.connect(self.updateFilaments)
@@ -48,7 +48,7 @@ class Window(Ui_MainWindow):
         self.spinBox_5.valueChanged.connect(self.updateFabricationCost)
         self.spinBox_4.valueChanged.connect(self.updateFabricationCost)
         self.spinBox_6.valueChanged.connect(self.updateFabricationCost)
-        self.removerLaImpresiNSpinBox.valueChanged.connect(self.updateFabricationCost)
+        self.slicing_time_SpinBox.valueChanged.connect(self.updateFabricationCost)
         self.iniciarImpresiNSpinBox.valueChanged.connect(self.updateFabricationCost)
         self.cambioDeFilamentoYHerramientasSpinBox.valueChanged.connect(self.updateFabricationCost)
         self.removerImpresiNSpinBox.valueChanged.connect(self.updateFabricationCost)
@@ -115,8 +115,8 @@ class Window(Ui_MainWindow):
             self.refreshUI(self.stackedWidget.currentIndex())
 
     def updateFabricationCost(self,*args):
-        human_time = (self.removerLaImpresiNSpinBox.value() + self.iniciarImpresiNSpinBox.value() +\
-            self.cambioDeFilamentoYHerramientasSpinBox.value() + self.removerImpresiNSpinBox.value() +\
+        human_time = (self.slicing_time_SpinBox.value() + self.iniciarImpresiNSpinBox.value() +\
+            self.cambioDeFilamentoYHerramientasSpinBox.value() + self.slicing_time_SpinBox.value() +\
             self.spinBox_9.value())/60
         printing_time = self.spinBox_5.value() + self.spinBox_4.value()/60
         grams_of_material = self.spinBox_6.value()
@@ -140,10 +140,28 @@ class Window(Ui_MainWindow):
         return (customer_id,printer_id,net_cost,customer_cost,description)
     
     def getHumanLaborInfo(self):
-        pass
+        slicing_time = self.slicing_time_SpinBox.value()/60
+        print_removal_time = self.slicing_time_SpinBox.value()/60
+        support_removal_time = self.slicing_time_SpinBox.value()/60
+        tool_change_time = self.slicing_time_SpinBox.value()/60
+        return (self.last_order,slicing_time,print_removal_time,support_removal_time,tool_change_time)
+    
     def createOrder(self):
-        self.data.order(*self.getOrderInfo())
-        
+        self.last_order = self.data.order(*self.getOrderInfo())
+    def createHumanTime(self):
+        if self.last_order != None:
+            self.data.human_labor(*self.getHumanLaborInfo())
+    def createFilamentConsumption(self):
+        if self.last_order != None:
+            filament_id = dict(zip(self.data.getFilamentsName(self.data.getFilamentsID(self.materialComboBox.currentText())),self.data.getFilamentsID(self.materialComboBox.currentText())))[self.filament_comboBox.currentText()]
+            grams_of_material = self.spinBox_6.value()
+            printing_time = self.spinBox_5.value() + self.spinBox_4.value()/60
+            self.data.filament_order(filament_id,self.last_order,grams_of_material,printing_time)
+    def createWholeOrder(self):
+        self.createOrder()
+        self.createHumanTime()
+        self.createFilamentConsumption()
+
 
     def updateClientCost(self):
         self.spinBox_8.blockSignals(True)
