@@ -22,7 +22,7 @@
     <item row="0" column="1">
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>1</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="start">
        <layout class="QGridLayout" name="gridLayout_4">
@@ -825,13 +825,6 @@
              </widget>
             </item>
            </layout>
-          </item>
-          <item row="2" column="2">
-           <widget class="QPushButton" name="pushButton">
-            <property name="text">
-             <string>Limpiar campos</string>
-            </property>
-           </widget>
           </item>
           <item row="2" column="1">
            <widget class="QPushButton" name="but_add">

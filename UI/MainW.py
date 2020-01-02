@@ -401,9 +401,6 @@ class Ui_MainWindow(object):
         self.stackedWidget_2.addWidget(self.customer)
         self.horizontalLayout_5.addWidget(self.stackedWidget_2)
         self.gridLayout.addLayout(self.horizontalLayout_5, 0, 0, 1, 1)
-        self.pushButton = QtWidgets.QPushButton(self.edit_inventory)
-        self.pushButton.setObjectName("pushButton")
-        self.gridLayout.addWidget(self.pushButton, 2, 2, 1, 1)
         self.but_add = QtWidgets.QPushButton(self.edit_inventory)
         self.but_add.setObjectName("but_add")
         self.gridLayout.addWidget(self.but_add, 2, 1, 1, 1)
@@ -441,7 +438,7 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(MainWindow)
-        self.stackedWidget.setCurrentIndex(1)
+        self.stackedWidget.setCurrentIndex(2)
         self.stackedWidget_2.setCurrentIndex(3)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
@@ -495,7 +492,6 @@ class Ui_MainWindow(object):
         self.nameLabel_3.setText(_translate("MainWindow", "Nombre"))
         self.lastNameLabel.setText(_translate("MainWindow", "Apellido"))
         self.phoneNumberLabel.setText(_translate("MainWindow", "Número telefónico"))
-        self.pushButton.setText(_translate("MainWindow", "Limpiar campos"))
         self.but_add.setText(_translate("MainWindow", "Añadir"))
         self.but_return_to_start_2.setToolTip(_translate("MainWindow", "<html><head/><body><p>Volver al inicio</p></body></html>"))
         self.label_2.setText(_translate("MainWindow", "Añadir item"))
