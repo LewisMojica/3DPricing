@@ -6,3 +6,6 @@ database.sqlite3-journal
 __pycache__/
 venv/
 
+build/
+dist/
+entry.spec

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>848</width>
-    <height>605</height>
+    <height>650</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -574,7 +574,7 @@
              </font>
             </property>
             <property name="text">
-             <string>TextLabel</string>
+             <string>Costo</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignHCenter|Qt::AlignTop</set>

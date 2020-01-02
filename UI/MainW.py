@@ -13,7 +13,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(848, 605)
+        MainWindow.resize(848, 650)
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(":/icons/icons/main_icon.icon"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         MainWindow.setWindowIcon(icon)
@@ -476,7 +476,7 @@ class Ui_MainWindow(object):
         self.spinBox_9.setSuffix(_translate("MainWindow", " minutos"))
         self.label_5.setText(_translate("MainWindow", "Descripción de orden:"))
         self.but_return_to_start.setToolTip(_translate("MainWindow", "<html><head/><body><p>Volver al inicio</p></body></html>"))
-        self.label_6.setText(_translate("MainWindow", "TextLabel"))
+        self.label_6.setText(_translate("MainWindow", "Costo"))
         self.dLabel.setText(_translate("MainWindow", "Costo de fabricación"))
         self.frabricationCost_label_7.setText(_translate("MainWindow", "1"))
         self.margenDeBeneficioNetoLabel.setText(_translate("MainWindow", "Margen de beneficio neto"))

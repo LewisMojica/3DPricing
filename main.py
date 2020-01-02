@@ -67,6 +67,24 @@ class Window(Ui_MainWindow):
         self.updateFilaments()
         self.stackedWidget.setCurrentIndex(index)
 
+    def refresh_CreateOrderUI(self):
+        items_to_clear = {'spinBox':(self.spinBox_4,self.spinBox_5,self.spinBox_6,self.slicing_time_SpinBox,\
+            self.iniciarImpresiNSpinBox,self.cambioDeFilamentoYHerramientasSpinBox,\
+                self.removerImpresiNSpinBox,self.spinBox_9),'textEdit':(self.textEdit)}
+        
+
+        for iter in items_to_clear['spinBox']:
+            iter.setValue(0)
+
+        try:
+            for iter in items_to_clear['textEdit']:
+                iter.clear()
+        except:
+            items_to_clear['textEdit'].clear()
+
+        self.customers_comboBox.setCurrentIndex(0)
+        
+
     def updateFilaments(self,i=0,e=0):
         self.filament_comboBox.clear()
 
@@ -117,7 +135,7 @@ class Window(Ui_MainWindow):
     def updateFabricationCost(self,*args):
         human_time = (self.slicing_time_SpinBox.value() + self.iniciarImpresiNSpinBox.value() +\
             self.cambioDeFilamentoYHerramientasSpinBox.value() + self.slicing_time_SpinBox.value() +\
-            self.spinBox_9.value())/60
+            self.spinBox_9.value())/60 + self.removerImpresiNSpinBox.value()/60
         printing_time = self.spinBox_5.value() + self.spinBox_4.value()/60
         grams_of_material = self.spinBox_6.value()
         printer_depracation = self.data.getPrinterDepracation(self.prippComboBox.currentIndex()+2)
@@ -161,6 +179,7 @@ class Window(Ui_MainWindow):
         self.createOrder()
         self.createHumanTime()
         self.createFilamentConsumption()
+        self.refresh_CreateOrderUI()
 
 
     def updateClientCost(self):
