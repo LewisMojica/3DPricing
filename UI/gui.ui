@@ -22,7 +22,7 @@
     <item row="0" column="2">
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>3</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="start">
        <layout class="QGridLayout" name="gridLayout_4">
@@ -596,13 +596,6 @@
               </property>
              </widget>
             </item>
-            <item row="0" column="1">
-             <widget class="QLabel" name="frabricationCost_label_7">
-              <property name="text">
-               <string>1</string>
-              </property>
-             </widget>
-            </item>
             <item row="1" column="0">
              <widget class="QLabel" name="margenDeBeneficioNetoLabel">
               <property name="text">
@@ -646,6 +639,16 @@
               </property>
               <property name="value">
                <double>100.000000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QDoubleSpinBox" name="doubleSpinBox">
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+              <property name="maximum">
+               <double>9999999.000000000000000</double>
               </property>
              </widget>
             </item>
