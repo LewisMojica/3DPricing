@@ -26,9 +26,9 @@ class Add:
         tables_count = len(tables_list)
 
         if tables_count == 0:
-            for iter in sql_script:
-                print(iter)
-                self.con_db.execute(iter)
+            for _iter in sql_script:
+                print(_iter)
+                self.con_db.execute(_iter)
             return 0
         elif tables_count == 9:
             return 2
@@ -58,25 +58,25 @@ class Add:
         self.con_db.commit()
         
 
-    def insertPrinter(self, name, depracation, electric_consumption):
+    def insertPrinter(self, name, deprecation, electric_consumption):
         '''agrega nueva impresora a base de datos'''
         cursor_db = self.getCursor()
-        cursor_db.execute('INSERT INTO printers (name, depracation, default_electric_consumption) VALUES ("{}",{},{})'.format(name,depracation,electric_consumption))
+        cursor_db.execute(f'INSERT INTO printers (name, deprecation, default_electric_consumption) VALUES ("{name}",{deprecation},{electric_consumption})')
         self.con_db.commit()
         cursor_db.close()
 
     def insertMaterial(self, name):
         '''agrega nuevo material a base de datos'''
         cursor_db = self.getCursor()
-        cursor_db.execute('INSERT INTO materials (name) VALUES ("{}")'.format(name))
+        cursor_db.execute(f'INSERT INTO materials (name) VALUES ("{name}")')
         self.con_db.commit()
         cursor_db.close()
 
-    def insertFilament(self, name, material, total_cost, length, actual_length='NULL'):
+    def insertFilament(self, name, material, total_cost, length):
         '''agrega nuevo filamento a base de datos'''
         cursor_db = self.getCursor()
-        cursor_db.execute('INSERT INTO filaments (name, material_name, total_cost, length, actual_length)\
-             VALUES("{}","{}",{},{},{})'.format(name,material,total_cost,length,actual_length))
+        cursor_db.execute(f'INSERT INTO filaments (name, material_name, total_cost, length)\
+             VALUES("{name}","{material}",{total_cost},{length})')
         self.con_db.commit()
         cursor_db.close()
 
@@ -96,31 +96,30 @@ class Add:
         self.con_db.commit()
         cursor_db.close()
 
-    def insertOrder(self, customer_id, printer_id, net_cost, customer_cost, description='NULL'):
+    def insertOrder(self, customer_id, net_cost, customer_cost, description='NULL'):
         '''agrega nueva orden a base de datos y retorna el id de la orden creada'''
         cursor_db = self.getCursor()
-        cursor_db.execute('INSERT INTO orders (customer_id, printer_id, net_cost, customer_cost, description, unix_time) VALUES({},{},{},{},"{}",{})'\
-            .format(customer_id, printer_id, net_cost, customer_cost, description, int(time.time())))
+        cursor_db.execute(f'INSERT INTO orders (customer_id, net_cost, customer_cost, description, unix_time)\
+             VALUES({customer_id},{net_cost},{customer_cost},"{description}",{int(time.time())})')
         
         order_id = tuple(cursor_db.execute('SELECT last_insert_rowid()'))[0][0]
         self.con_db.commit()
         cursor_db.close()
         return order_id
 
-    def insertFilament_order(self, filament_id,order_id,length,printing_time):
+    def insertFilament_order(self, filament_id,order_id,length,printing_time,printer_id):
         '''agrega consumo de filamente a orden en base de datos'''
         cursor_db = self.getCursor()
-        cursor_db.execute('INSERT INTO filament_order (filament_id,order_id,length,printing_time) VALUES({},{},{},{})'\
-            .format(filament_id,order_id,length,printing_time))
+        cursor_db.execute('INSERT INTO filament_order (filament_id,order_id,length,printing_time,printer_id) VALUES({},{},{},{},{})'\
+            .format(filament_id,order_id,length,printing_time,printer_id))
         self.con_db.commit()
         cursor_db.close()
 
-    def insertHuman_labor(self, order_id, slicing,print_removal=0, support_removal=0, filament_change=0, tool_change=0):
+    def insertHuman_labor(self, order_id, slicing,print_removal=0, support_removal=0,set_up_printer=0):
         '''agrega horas de trabajo (humano) de una cierta orden a la base de datos'''
         cursor_db = self.getCursor()
-        cursor_db.execute('INSERT INTO human_time (order_id, slicing,print_removal, support_removal, \
-                        filament_change, tool_change) VALUES({},{},{},{},{},{})'.format(order_id, slicing,print_removal,\
-                                                                    support_removal,filament_change, tool_change))
+        cursor_db.execute(f'INSERT INTO human_time (order_id, slicing,print_removal, support_removal, \
+            set_up_printer) VALUES({order_id},{slicing},{print_removal},{support_removal},{set_up_printer})')
         self.con_db.commit()
         cursor_db.close()
 

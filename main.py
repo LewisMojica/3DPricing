@@ -1,44 +1,42 @@
 from UI.MainW import Ui_MainWindow
-
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore import QAbstractItemModel
+from PyQt5.QtWidgets import QApplication, QMainWindow
 
 import AppData
 
-class Window(Ui_MainWindow):    
+class Window(Ui_MainWindow):
     def setupUi(self, MainWindow):
         super().setupUi(MainWindow)
         self.data = AppData.Add()
 
         #CreateOrderUI
         '''impresoras en el combobox'''
-        self.current_printers_CreateOrderUI=()
+        self.current_printers_CreateOrderUI = ()
         '''carretes en el combobox'''
-        self.current_filaments_CreateOrderUI=()
+        self.current_filaments_CreateOrderUI = ()
         '''clientes en el combobox'''
-        self.current_customers_CreateOrderUI=()
-        self.current_materials_CreateOrderUI=()
+        self.current_customers_CreateOrderUI = ()
+        self.current_materials_CreateOrderUI = ()
 
         #AddItemUI
-        self.current_materials_AddItemsUI=()
-
+        self.current_materials_AddItemsUI = ()
+    
         #EditDeleteUI
-        self.current_materials_EditDeleteUI=()
-        self.current_printers_EditDeleteUI=()
+        self.current_materials_EditDeleteUI = ()
+        self.current_printers_EditDeleteUI = ()
 
 
 
         self.item_to_clear_addItem = {\
-            'spinBox':(self.spinBox,self.consumoDeElectricidadSpinBox,self.costoDelCarreteSpinBox,self.spinBox_2,self.spinBox_3),\
-            'textEdit':(self.nameLineEdit,self.nameLineEdit_2,self.nameLineEdit_3,self.lastNameLineEdit,self.phoneNumberLineEdit),
+            'spinBox':(self.spinBox, self.consumoDeElectricidadSpinBox, self.costoDelCarreteSpinBox,\
+                self.spinBox_2),
+            'textEdit':(self.nameLineEdit, self.nameLineEdit_2, self.nameLineEdit_3, self.lastNameLineEdit, self.phoneNumberLineEdit),
             'comboBox':(self.materialComboBox_3)}
 
         self.items_to_clear_createOrder = {\
-            'spinBox':(self.spinBox_4,self.spinBox_5,self.spinBox_6,self.slicing_time_SpinBox,\
-                self.iniciarImpresiNSpinBox,self.cambioDeFilamentoYHerramientasSpinBox,\
-                self.removerImpresiNSpinBox,self.spinBox_9),
+            'spinBox':(self.spinBox_4, self.spinBox_5, self.spinBox_6, self.slicing_time_SpinBox,\
+                self.setUpPrinterSpinBox,self.removerImpresiNSpinBox, self.spinBox_9),
             'textEdit':(self.textEdit),\
-            'comboBox':(self.customers_comboBox,self.materialComboBox,self.prippComboBox)}
+            'comboBox':(self.customers_comboBox, self.materialComboBox, self.prippComboBox)}
 
         self.items_to_clear_editDelete ={\
             'spinBox':(self.costoDeElectricidadSpinBox),
@@ -79,7 +77,7 @@ class Window(Ui_MainWindow):
         self.materialComboBox_9.currentIndexChanged.connect(self.refresh_EditDeleteUI)
         self.impresoraComboBox.currentIndexChanged.connect(self.refresh_EditDeleteUI)
 
-        to_connect = (self.slicing_time_SpinBox,self.iniciarImpresiNSpinBox,self.cambioDeFilamentoYHerramientasSpinBox,\
+        to_connect = (self.slicing_time_SpinBox,self.setUpPrinterSpinBox,\
             self.removerImpresiNSpinBox,self.spinBox_9,self.spinBox_5,self.spinBox_4,self.spinBox_6)
         for comboBox in to_connect:
             comboBox.valueChanged.connect(self.updateFabricationCost)      
@@ -142,18 +140,20 @@ class Window(Ui_MainWindow):
     def refresh_EditDeleteUI(self,index=0):
         material_name = self.current_materials_EditDeleteUI[self.materialComboBox_9.currentIndex()][0]
         
-        if len(self.current_printers_EditDeleteUI) > 0:
+        if(len(self.current_printers_EditDeleteUI) > 0):
             printer_id = self.current_printers_EditDeleteUI[self.impresoraComboBox.currentIndex()][0]        
-            existing_records = self.data.getMaterialsConsumptions(where='material_name="{}" AND printer_id={}'.format(material_name,printer_id))
-        else:
-            existing_records = ()
-            
-        if len(existing_records) == 1:
-            self.costoDeElectricidadSpinBox.setValue(existing_records[0][0])
-            self.cambiarCostoDeElectricidadASpinBox.setValue(existing_records[0][0])
-        else:
-            self.costoDeElectricidadSpinBox.setValue(0)
-            self.cambiarCostoDeElectricidadASpinBox.setValue(0)
+            existing_records = self.data.getMaterialsConsumptions(where=f'material_name="{material_name}" AND printer_id={printer_id}')                
+            if len(existing_records) == 1:
+                self.costoDeElectricidadSpinBox.setValue(existing_records[0][0])
+                self.cambiarCostoDeElectricidadASpinBox.setValue(existing_records[0][0])
+            else:
+                current_cost = 0
+                for i in self.current_printers_EditDeleteUI:
+                    if i[0] == printer_id:
+                        current_cost = i[3]
+                        break
+                self.costoDeElectricidadSpinBox.setValue(current_cost)
+                self.cambiarCostoDeElectricidadASpinBox.setValue(current_cost)
 
 
 
@@ -185,10 +185,6 @@ class Window(Ui_MainWindow):
             qobjects['comboBox'].clear()
         
 
-
-
-
-
     def addItem(self):
         currentRow = self.listWidget_SelectNewItem.currentRow()
         if currentRow==1:
@@ -196,9 +192,8 @@ class Window(Ui_MainWindow):
             name = self.nameLineEdit_2.text().strip()
             cost = self.costoDelCarreteSpinBox.value()
             grams = self.spinBox_2.value()
-            actual_grams = self.spinBox_3.value()
             if len(name.replace(' ','')) > 0:
-                self.data.insertFilament(name,material,cost,grams,actual_grams)
+                self.data.insertFilament(name,material,cost,grams)
                 self.resetItems(self.item_to_clear_addItem)
                 self.refreshUI()
         elif currentRow == 0:
@@ -221,22 +216,21 @@ class Window(Ui_MainWindow):
     def getOrderInfo(self):
         print(self.prippComboBox.currentIndex())
         customer_id = self.current_customers_CreateOrderUI[self.customers_comboBox.currentIndex()][0]
-        printer_id = self.current_printers_CreateOrderUI[self.prippComboBox.currentIndex()][0]
 
         net_cost = self.doubleSpinBox.value()
         customer_cost = self.spinBox_8.value()
         description = self.textEdit.toPlainText()
-        return (customer_id,printer_id,net_cost,customer_cost,description)
+        return (customer_id,net_cost,customer_cost,description)
     
     def getHumanLaborInfo(self):
         slicing_time = self.slicing_time_SpinBox.value()/60
         print_removal_time = self.removerImpresiNSpinBox.value()/60
         support_removal_time = self.spinBox_9.value()/60
-        tool_change_time = (self.iniciarImpresiNSpinBox.value() + self.cambioDeFilamentoYHerramientasSpinBox.value())/60
-        return (slicing_time,print_removal_time,support_removal_time,tool_change_time)
+        set_up_printer_time = self.setUpPrinterSpinBox.value()/60
+        return (slicing_time,print_removal_time,support_removal_time,set_up_printer_time)
     
     def getFabricationCost(self):
-        human_time_cost = self.data.getPrinters('depracation','name="human" AND id=1')[0][0]
+        human_time_cost = self.data.getPrinters('deprecation','name="human" AND id=1')[0][0]
         human_time = sum(self.getHumanLaborInfo())
         printer = self.current_printers_CreateOrderUI[self.prippComboBox.currentIndex()]
         material_name = self.current_materials_CreateOrderUI[self.materialComboBox.currentIndex()][0]
@@ -255,13 +249,14 @@ class Window(Ui_MainWindow):
 
             
     def createWholeOrder(self):
+        printer_id = self.current_printers_CreateOrderUI[self.prippComboBox.currentIndex()][0]
         filament_id = self.current_filaments_CreateOrderUI[self.filament_comboBox.currentIndex()][0]
         grams_of_material = self.spinBox_6.value()
         printing_time = self.spinBox_5.value() + self.spinBox_4.value()/60
         order_id = self.data.insertOrder(*self.getOrderInfo())
 
         self.data.insertHuman_labor(order_id,*self.getHumanLaborInfo())
-        self.data.insertFilament_order(filament_id,order_id,grams_of_material,printing_time)
+        self.data.insertFilament_order(filament_id,order_id,grams_of_material,printing_time,printer_id)
 
         self.update_CreateOrderUI()
 
@@ -316,6 +311,7 @@ class Window(Ui_MainWindow):
         self.stackedWidget.setCurrentWidget(self.edit_delete)
 
 def main():
+    
     app = QApplication([])
     tmp = Window()
     win = QMainWindow()
