@@ -22,7 +22,7 @@
     <item row="0" column="2">
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>1</number>
+       <number>3</number>
       </property>
       <widget class="QWidget" name="start">
        <layout class="QGridLayout" name="gridLayout_4">
@@ -406,14 +406,20 @@
              </widget>
             </item>
             <item row="1" column="0">
-             <widget class="QLabel" name="iniciarImpresiNLabel">
+             <widget class="QLabel" name="setUpPrinterLabel">
+              <property name="toolTip">
+               <string>Cambio de filamento y herramientas</string>
+              </property>
               <property name="text">
-               <string>Iniciar impresión</string>
+               <string>Preparación de impresora</string>
               </property>
              </widget>
             </item>
             <item row="1" column="1">
-             <widget class="QSpinBox" name="iniciarImpresiNSpinBox">
+             <widget class="QSpinBox" name="setUpPrinterSpinBox">
+              <property name="toolTip">
+               <string>Cambio de filamento y herramientas</string>
+              </property>
               <property name="suffix">
                <string> minutos</string>
               </property>
@@ -423,30 +429,13 @@
              </widget>
             </item>
             <item row="2" column="0">
-             <widget class="QLabel" name="cambioDeFilamentoYHerramientasLabel">
-              <property name="text">
-               <string>Cambio de filamento y herramientas</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="1">
-             <widget class="QSpinBox" name="cambioDeFilamentoYHerramientasSpinBox">
-              <property name="suffix">
-               <string> minutos</string>
-              </property>
-              <property name="maximum">
-               <number>999</number>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="0">
              <widget class="QLabel" name="removerImpresiNLabel">
               <property name="text">
                <string>Remover impresión</string>
               </property>
              </widget>
             </item>
-            <item row="3" column="1">
+            <item row="2" column="1">
              <widget class="QSpinBox" name="removerImpresiNSpinBox">
               <property name="suffix">
                <string> minutos</string>
@@ -456,14 +445,14 @@
               </property>
              </widget>
             </item>
-            <item row="4" column="0">
+            <item row="3" column="0">
              <widget class="QLabel" name="removerSoportesLabel">
               <property name="text">
                <string>Remover soportes</string>
               </property>
              </widget>
             </item>
-            <item row="4" column="1">
+            <item row="3" column="1">
              <widget class="QSpinBox" name="spinBox_9">
               <property name="suffix">
                <string> minutos</string>
@@ -647,6 +636,12 @@
               <property name="readOnly">
                <bool>true</bool>
               </property>
+              <property name="prefix">
+               <string>$ </string>
+              </property>
+              <property name="suffix">
+               <string/>
+              </property>
               <property name="maximum">
                <double>9999999.000000000000000</double>
               </property>
@@ -712,7 +707,7 @@
             <item>
              <widget class="QStackedWidget" name="stackedWidget_2">
               <property name="currentIndex">
-               <number>0</number>
+               <number>2</number>
               </property>
               <widget class="QWidget" name="blank"/>
               <widget class="QWidget" name="printer">
@@ -741,17 +736,27 @@
                     <property name="suffix">
                      <string> $/hora</string>
                     </property>
+                    <property name="maximum">
+                     <number>99999</number>
+                    </property>
                    </widget>
                   </item>
                   <item row="2" column="0">
                    <widget class="QLabel" name="consumoDeElectricidadLabel">
                     <property name="text">
-                     <string>Consumo de electricidad</string>
+                     <string>Consumo de eléctrico</string>
                     </property>
                    </widget>
                   </item>
                   <item row="2" column="1">
-                   <widget class="QSpinBox" name="consumoDeElectricidadSpinBox"/>
+                   <widget class="QSpinBox" name="consumoDeElectricidadSpinBox">
+                    <property name="suffix">
+                     <string> kW/h/h</string>
+                    </property>
+                    <property name="maximum">
+                     <number>99999</number>
+                    </property>
+                   </widget>
                   </item>
                  </layout>
                 </item>
@@ -789,7 +794,14 @@
                    </widget>
                   </item>
                   <item row="2" column="1">
-                   <widget class="QSpinBox" name="costoDelCarreteSpinBox"/>
+                   <widget class="QSpinBox" name="costoDelCarreteSpinBox">
+                    <property name="prefix">
+                     <string>$ </string>
+                    </property>
+                    <property name="maximum">
+                     <number>999999</number>
+                    </property>
+                   </widget>
                   </item>
                   <item row="3" column="0">
                    <widget class="QLabel" name="gramosDelCarreteLabel">
@@ -799,17 +811,17 @@
                    </widget>
                   </item>
                   <item row="3" column="1">
-                   <widget class="QSpinBox" name="spinBox_2"/>
-                  </item>
-                  <item row="4" column="0">
-                   <widget class="QLabel" name="gramosRestantesLabel">
-                    <property name="text">
-                     <string>Gramos restantes</string>
+                   <widget class="QSpinBox" name="spinBox_2">
+                    <property name="suffix">
+                     <string> g</string>
+                    </property>
+                    <property name="prefix">
+                     <string/>
+                    </property>
+                    <property name="maximum">
+                     <number>999999</number>
                     </property>
                    </widget>
-                  </item>
-                  <item row="4" column="1">
-                   <widget class="QSpinBox" name="spinBox_3"/>
                   </item>
                  </layout>
                 </item>
@@ -925,8 +937,13 @@
        <layout class="QGridLayout" name="gridLayout_36">
         <item row="1" column="0">
          <widget class="QLabel" name="label_25">
+          <property name="font">
+           <font>
+            <pointsize>15</pointsize>
+           </font>
+          </property>
           <property name="text">
-           <string>TextLabel</string>
+           <string>Editar/eliminar</string>
           </property>
          </widget>
         </item>
@@ -967,9 +984,15 @@
             <item>
              <widget class="QStackedWidget" name="stackedWidget_3">
               <property name="currentIndex">
-               <number>1</number>
+               <number>3</number>
               </property>
-              <widget class="QWidget" name="Impresora"/>
+              <widget class="QWidget" name="Impresora">
+               <layout class="QFormLayout" name="formLayout_8">
+                <item row="0" column="0">
+                 <layout class="QFormLayout" name="formLayout_7"/>
+                </item>
+               </layout>
+              </widget>
               <widget class="QWidget" name="Material">
                <layout class="QFormLayout" name="formLayout_27">
                 <item row="0" column="0">
@@ -997,7 +1020,7 @@
                   <item row="2" column="0">
                    <widget class="QLabel" name="costoDeElectricidadLabel">
                     <property name="text">
-                     <string>Costo de electricidad</string>
+                     <string>Consumo eléctrico</string>
                     </property>
                    </widget>
                   </item>
@@ -1006,24 +1029,49 @@
                     <property name="readOnly">
                      <bool>true</bool>
                     </property>
+                    <property name="suffix">
+                     <string> kW/h/h</string>
+                    </property>
+                    <property name="maximum">
+                     <number>99999</number>
+                    </property>
                    </widget>
                   </item>
                   <item row="3" column="0">
                    <widget class="QLabel" name="cambiarCostoDeElectricidadALabel">
                     <property name="text">
-                     <string>Cambiar costo de electricidad a </string>
+                     <string>Cambiar consumo eléctrico a</string>
                     </property>
                    </widget>
                   </item>
                   <item row="3" column="1">
-                   <widget class="QSpinBox" name="cambiarCostoDeElectricidadASpinBox"/>
+                   <widget class="QSpinBox" name="cambiarCostoDeElectricidadASpinBox">
+                    <property name="suffix">
+                     <string> kW/h/h</string>
+                    </property>
+                    <property name="maximum">
+                     <number>99999</number>
+                    </property>
+                   </widget>
                   </item>
                  </layout>
                 </item>
                </layout>
               </widget>
-              <widget class="QWidget" name="Carrete"/>
-              <widget class="QWidget" name="Cliente"/>
+              <widget class="QWidget" name="Carrete">
+               <layout class="QFormLayout" name="formLayout_10">
+                <item row="0" column="0">
+                 <layout class="QFormLayout" name="formLayout_9"/>
+                </item>
+               </layout>
+              </widget>
+              <widget class="QWidget" name="Cliente">
+               <layout class="QFormLayout" name="formLayout_12">
+                <item row="0" column="0">
+                 <layout class="QFormLayout" name="formLayout_11"/>
+                </item>
+               </layout>
+              </widget>
              </widget>
             </item>
            </layout>
@@ -1061,6 +1109,13 @@
              </size>
             </property>
            </spacer>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_5">
+            <property name="text">
+             <string>Eliminar</string>
+            </property>
+           </widget>
           </item>
           <item alignment="Qt::AlignRight">
            <widget class="QPushButton" name="pushButton">
