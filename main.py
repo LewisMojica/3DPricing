@@ -36,7 +36,7 @@ class Window(Ui_MainWindow):
                 self.iniciarImpresiNSpinBox,self.cambioDeFilamentoYHerramientasSpinBox,\
                 self.removerImpresiNSpinBox,self.spinBox_9),
             'textEdit':(self.textEdit),\
-            'comboBox':(self.customers_comboBox)}
+            'comboBox':(self.customers_comboBox,self.materialComboBox,self.prippComboBox)}
 
         self.items_to_clear_editDelete ={\
             'spinBox':(self.costoDeElectricidadSpinBox),
@@ -99,8 +99,11 @@ class Window(Ui_MainWindow):
         self.current_printers_CreateOrderUI = self.data.getPrinters()[1:]
         self.prippComboBox.insertItems(0,[x[1] for x in self.current_printers_CreateOrderUI])
 
+        self.materialComboBox.blockSignals(True)
         self.current_materials_CreateOrderUI = self.data.getMaterials()
         self.materialComboBox.insertItems(0,[x[0] for x in self.current_materials_CreateOrderUI])
+        self.materialComboBox.blockSignals(True)
+        self.update_CreateOrderUI_Filaments()
 
         self.current_customers_CreateOrderUI = self.data.getCustomers()
         self.customers_comboBox.insertItems(0,[x[1] for x in self.current_customers_CreateOrderUI])
@@ -202,8 +205,9 @@ class Window(Ui_MainWindow):
 
 
     def getOrderInfo(self):
-        customer_id = self.current_customers_CreateOrderUI[self.prippComboBox.currentIndex()]
-        printer_id = self.current_printers_CreateOrderUI(self.prippComboBox.currentIndex())
+        print(self.prippComboBox.currentIndex())
+        customer_id = self.current_customers_CreateOrderUI[self.customers_comboBox.currentIndex()][0]
+        printer_id = self.current_printers_CreateOrderUI[self.prippComboBox.currentIndex()][0]
 
         net_cost = float(self.frabricationCost_label_7.text().replace('$',''))
         customer_cost = self.spinBox_8.value()
@@ -222,7 +226,10 @@ class Window(Ui_MainWindow):
         material_name = self.current_materials_CreateOrderUI[self.materialComboBox.currentIndex()][0]
         printing_time = (self.spinBox_5.value() + self.spinBox_4.value()/60)
         filament = self.current_filaments_CreateOrderUI[self.filament_comboBox.currentIndex()]
-        electricity_cost_per_hour = self.data.getMaterialsConsumptions('consumption',f'printer_id={printer[0]} AND material_name="{material_name}"')[0][0]
+        try:
+            electricity_cost_per_hour = self.data.getMaterialsConsumptions('consumption',f'printer_id={printer[0]} AND material_name="{material_name}"')[0][0]
+        except IndexError:
+            electricity_cost_per_hour = printer[3]
         printer_operation_cost = printer[2]*printing_time
         material_cost_per_gram = filament[3]/filament[4]
         material_cost = material_cost_per_gram*self.spinBox_6.value()
@@ -232,10 +239,16 @@ class Window(Ui_MainWindow):
 
             
     def createWholeOrder(self):
-        order_id = self.data.order(*self.getOrderInfo())
-        self.data.human_labor(order_id,*self.getHumanLaborInfo())
-        self.createFilamentConsumption()
-        self.refresh_CreateOrderUI()
+        filament_id = self.current_filaments_CreateOrderUI[self.filament_comboBox.currentIndex()][0]
+        grams_of_material = self.spinBox_6.value()
+        printing_time = self.spinBox_5.value() + self.spinBox_4.value()/60
+        order_id = self.data.insertOrder(*self.getOrderInfo())
+
+        self.data.insertHuman_labor(order_id,*self.getHumanLaborInfo())
+        self.data.insertFilament_order(filament_id,order_id,grams_of_material,printing_time)
+
+        self.update_CreateOrderUI()
+
 
     def updateFabricationCost(self,*args):
         pass
