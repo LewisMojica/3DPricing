@@ -116,6 +116,11 @@ class Window(Ui_MainWindow):
         self.current_customers_CreateOrderUI = self.data.getCustomers()
         self.customers_comboBox.insertItems(0,[x[1] for x in self.current_customers_CreateOrderUI])
 
+        create_order_flag = (self.prippComboBox.count() == 0 or self.materialComboBox.count() == 0 or self.filament_comboBox.count() == 0 or\
+            self.customers_comboBox.count() == 0)
+        
+        self.pushButton_2.setEnabled(not(create_order_flag))
+
         self.update_CreateOrderUI_Filaments()
 
     def update_CreateOrderUI_Filaments(self,i=0,e=0):
@@ -124,6 +129,11 @@ class Window(Ui_MainWindow):
         self.current_filaments_CreateOrderUI = self.data.getFilaments(where='material_name="{}"'.format(current_material))
 
         self.filament_comboBox.insertItems(0,[x[1] for x in self.current_filaments_CreateOrderUI])
+        
+        create_order_flag = (self.prippComboBox.count() == 0 or self.materialComboBox.count() == 0 or self.filament_comboBox.count() == 0 or\
+            self.customers_comboBox.count() == 0)
+        
+        self.pushButton_2.setEnabled(not(create_order_flag))
     
     def update_EditDeleteUI(self):
         self.materialComboBox_9.blockSignals(True)
