@@ -9,3 +9,5 @@ venv/
 build/
 dist/
 entry.spec
+*.ignore
+
