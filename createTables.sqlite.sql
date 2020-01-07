@@ -1,7 +1,8 @@
 CREATE TABLE "printers" (
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "name" VARCHAR(42)   NOT NULL,
-    "depracation" REAL   NOT NULL
+    "depracation" REAL   NOT NULL,
+    "default_electric_consumption" REAL   NOT NULL
 );
 
 CREATE TABLE "filaments" (
@@ -68,7 +69,7 @@ CREATE TABLE "human_time" (
     FOREIGN KEY(order_id) REFERENCES orders(id)
 );
 
-INSERT INTO printers (name, depracation) VALUES ("human",200);
+INSERT INTO printers (name, depracation, default_electric_consumption) VALUES ("human",200, 0);
 INSERT INTO materials (name) VALUES ("pla");
 INSERT INTO materials (name) VALUES ("petg");
 INSERT INTO materials (name) VALUES ("abs");
