@@ -23,6 +23,8 @@ class Window(Ui_MainWindow):
         #EditDeleteUI
         self.current_materials_EditDeleteUI = ()
         self.current_printers_EditDeleteUI = ()
+        self.current_customers_EditDeleteUI = ()
+        self.current_filaments_EditDeleteUI = ()
 
 
 
@@ -39,9 +41,11 @@ class Window(Ui_MainWindow):
             'comboBox':(self.customers_comboBox, self.materialComboBox, self.prippComboBox)}
 
         self.items_to_clear_editDelete ={\
-            'spinBox':(self.costoDeElectricidadSpinBox),
-            'textEdit':(),
-            'comboBox':(self.materialComboBox_9,self.impresoraComboBox),
+            'spinBox':(self.costoDeElectricidadSpinBox, self.cambiarCostoDeElectricidadASpinBox, self.iDSpinBox_2,\
+                self.spinBox_3, self.consumoElCtricoPorDefectoSpinBox, self.costoDeUsoDepreciaciNDoubleSpinBox),
+            'textEdit':(self.nombreLineEdit_3, self.apellidoLineEdit, self.nMeroTelefNicoLineEdit, self.nombreLineEdit),
+            'comboBox':(self.materialComboBox_9,self.impresoraComboBox, self.clienteComboBox, self.impresoraComboBox_2\
+                ),
             }
         self.connect_all()
 
@@ -66,16 +70,18 @@ class Window(Ui_MainWindow):
         self.but_add_item.clicked.connect(self.swTo_AddItem)
         self.pushButton_4.clicked.connect(self.swTo_AddEdit_delete)
 
-        self.pushButton.clicked.connect(self.createMaterialConsumption_EditDeleteUI)
+        self.pushButton.clicked.connect(self.saveChanges_EditDeleteUI)
 
         self.but_add.clicked.connect(self.addItem)
         self.pushButton_2.clicked.connect(self.createWholeOrder)
         
         self.materialComboBox.currentIndexChanged.connect(self.update_CreateOrderUI_Filaments)
 
-
+        
         self.materialComboBox_9.currentIndexChanged.connect(self.refresh_EditDeleteUI)
         self.impresoraComboBox.currentIndexChanged.connect(self.refresh_EditDeleteUI)
+        self.clienteComboBox.currentIndexChanged.connect(self.refresh_EditDeleteUI)
+        self.impresoraComboBox_2.currentIndexChanged.connect(self.refresh_EditDeleteUI)
 
         to_connect = (self.slicing_time_SpinBox,self.setUpPrinterSpinBox,\
             self.removerImpresiNSpinBox,self.spinBox_9,self.spinBox_5,self.spinBox_4,self.spinBox_6)
@@ -86,6 +92,11 @@ class Window(Ui_MainWindow):
         self.doubleSpinBox.valueChanged.connect(self.updateClientCost)
         self.spinBox_7.valueChanged.connect(self.updateClientCost)
         self.spinBox_8.valueChanged.connect(self.updateNetProfitMargin)
+
+        self.pushButton_5.clicked.connect(self.delete_EditDeleteUI)\
+
+        self.carreteComboBox.currentIndexChanged.connect(self.refresh_EditDeleteUI)
+
 
     def refreshUI(self):
         self.update_AddItem()
@@ -136,43 +147,128 @@ class Window(Ui_MainWindow):
         self.pushButton_2.setEnabled(not(create_order_flag))
     
     def update_EditDeleteUI(self):
-        self.materialComboBox_9.blockSignals(True)
-        self.impresoraComboBox.blockSignals(True)
-        self.resetItems(self.items_to_clear_editDelete)
+        self.carreteComboBox
+
+        def fillComboBox(comboBox, item_list):
+            comboBox.blockSignals(True)
+            comboBox.clear()
+            comboBox.insertItems(0,item_list)
+            comboBox.blockSignals(False)
+
         self.current_materials_EditDeleteUI = self.data.getMaterials()
-        self.materialComboBox_9.insertItems(0,[x[0] for x in self.current_materials_EditDeleteUI])
+        fillComboBox(self.materialComboBox_9,[x[0] for x in self.current_materials_EditDeleteUI])
+
         self.current_printers_EditDeleteUI = self.data.getPrinters()[1:]
-        self.impresoraComboBox.insertItems(0,[x[1] for x in self.current_printers_EditDeleteUI])
-        self.materialComboBox_9.blockSignals(False)
-        self.impresoraComboBox.blockSignals(False)
+        fillComboBox(self.impresoraComboBox_2,[x[1] for x in self.current_printers_EditDeleteUI])
+        fillComboBox(self.impresoraComboBox,[x[1] for x in self.current_printers_EditDeleteUI])
+
+        self.current_customers_EditDeleteUI = self.data.getCustomers()
+        fillComboBox(self.clienteComboBox,[x[1] for x in self.current_customers_EditDeleteUI])
+
+        self.current_filaments_EditDeleteUI = self.data.getFilaments()
+        fillComboBox(self.carreteComboBox,[x[1] for x in self.current_filaments_EditDeleteUI])
+
         self.refresh_EditDeleteUI()
 
     def refresh_EditDeleteUI(self,index=0):
-        material_name = self.current_materials_EditDeleteUI[self.materialComboBox_9.currentIndex()][0]
-        
-        if(len(self.current_printers_EditDeleteUI) > 0):
-            printer_id = self.current_printers_EditDeleteUI[self.impresoraComboBox.currentIndex()][0]        
-            existing_records = self.data.getMaterialsConsumptions(where=f'material_name="{material_name}" AND printer_id={printer_id}')                
-            if len(existing_records) == 1:
-                self.costoDeElectricidadSpinBox.setValue(existing_records[0][0])
-                self.cambiarCostoDeElectricidadASpinBox.setValue(existing_records[0][0])
+        if self.listWidget.currentRow() == 0:
+            printer_exists = self.impresoraComboBox_2.count() != 0
+            self.pushButton_5.setEnabled(printer_exists)
+            self.pushButton.setEnabled(printer_exists)
+            if printer_exists:
+                current_printer = self.current_printers_EditDeleteUI[self.impresoraComboBox_2.currentIndex()]
+                self.spinBox_3.setValue(current_printer[0])
+                self.nombreLineEdit.setText(current_printer[1])
+                self.consumoElCtricoPorDefectoSpinBox.setValue(current_printer[3])
+                self.costoDeUsoDepreciaciNDoubleSpinBox.setValue(current_printer[2])
+
+        elif self.listWidget.currentRow() == 1:
+            self.pushButton_5.setEnabled(False)
+            self.pushButton.setEnabled(self.impresoraComboBox.count() != 0)
+            material_name = self.current_materials_EditDeleteUI[self.materialComboBox_9.currentIndex()][0]
+            
+            if(len(self.current_printers_EditDeleteUI) > 0):
+                printer_id = self.current_printers_EditDeleteUI[self.impresoraComboBox.currentIndex()][0]        
+                existing_records = self.data.getMaterialsConsumptions(where=f'material_name="{material_name}" AND printer_id={printer_id}')                
+                if len(existing_records) == 1:
+                    self.costoDeElectricidadSpinBox.setValue(existing_records[0][0])
+                    self.cambiarCostoDeElectricidadASpinBox.setValue(existing_records[0][0])
+                else:
+                    current_cost = 0
+                    for i in self.current_printers_EditDeleteUI:
+                        if i[0] == printer_id:
+                            current_cost = i[3]
+                            break
+                    self.costoDeElectricidadSpinBox.setValue(current_cost)
+                    self.cambiarCostoDeElectricidadASpinBox.setValue(current_cost)
+        elif self.listWidget.currentRow() == 2:
+            filaments_exists = self.carreteComboBox.count() != 0
+            self.pushButton_5.setEnabled(filaments_exists)
+            self.pushButton.setEnabled(filaments_exists)
+            if filaments_exists:
+                current_filament = self.current_filaments_EditDeleteUI[self.carreteComboBox.currentIndex()]
+                self.iDSpinBox.setValue(current_filament[0])
+                self.label_7.setText(current_filament[5])
+                self.nombreLineEdit_2.setText(current_filament[1])
+                self.costoTotalDoubleSpinBox.setValue(current_filament[3])
+                self.gramosTotalesSpinBox.setValue(current_filament[4])
+
+        elif self.listWidget.currentRow() == 3:
+            customers_extists = self.clienteComboBox.count() != 0
+            
+            self.pushButton_5.setEnabled(customers_extists)
+            self.pushButton.setEnabled(customers_extists)
+            
+            if customers_extists:
+                current_customer = self.current_customers_EditDeleteUI[self.clienteComboBox.currentIndex()]
+                self.iDSpinBox_2.setValue(current_customer[0])
+                self.nombreLineEdit_3.setText(current_customer[1])
+                self.apellidoLineEdit.setText(current_customer[2])
+                self.nMeroTelefNicoLineEdit.setText(current_customer[3])
+                
+    
+    def refresh_EditDeleteUI_customer(self):
+        if len(self.current_customers_EditDeleteUI) > 0:
+            customer = self.current_customers_EditDeleteUI[self.clienteComboBox.currentIndex()]
+            self.iDSpinBox_2.setValue(customer[0])
+            self.nombreLineEdit_3.setText(customer[1])
+            self.apellidoLineEdit.setText(customer[2])
+            if customer[3] == None:
+                self.nMeroTelefNicoLineEdit.clear()
             else:
-                current_cost = 0
-                for i in self.current_printers_EditDeleteUI:
-                    if i[0] == printer_id:
-                        current_cost = i[3]
-                        break
-                self.costoDeElectricidadSpinBox.setValue(current_cost)
-                self.cambiarCostoDeElectricidadASpinBox.setValue(current_cost)
+                self.nMeroTelefNicoLineEdit.setText(str(customer[3]))
 
 
+    def saveChanges_EditDeleteUI(self):
+        if self.listWidget.currentRow() == 0:
+            self.data.updatePrinter(id = self.spinBox_3.value(), name = self.nombreLineEdit.text(),\
+                depreciation = self.costoDeUsoDepreciaciNDoubleSpinBox.value(), consumption = self.consumoElCtricoPorDefectoSpinBox.value())
+            self.refreshUI()
+        elif self.listWidget.currentRow() == 1:
+            material_name = self.current_materials_EditDeleteUI[self.materialComboBox_9.currentIndex()][0]
+            printer_id = self.current_printers_EditDeleteUI[self.impresoraComboBox.currentIndex()][0]     
 
-    def createMaterialConsumption_EditDeleteUI(self):
-        material_name = self.current_materials_EditDeleteUI[self.materialComboBox_9.currentIndex()][0]
-        printer_id = self.current_printers_EditDeleteUI[self.impresoraComboBox.currentIndex()][0]     
-
-        self.data.setMaterialConsumption(self.cambiarCostoDeElectricidadASpinBox.value(),material_name,printer_id)
+            self.data.setMaterialConsumption(self.cambiarCostoDeElectricidadASpinBox.value(),material_name,printer_id)
+        elif self.listWidget.currentRow() == 2:
+            self.data.updateFilament(id=self.iDSpinBox.value(),name = self.nombreLineEdit_2.text(),\
+                total_cost = self.costoTotalDoubleSpinBox.value(), weight = self.gramosTotalesSpinBox.value())
+            self.refreshUI()
+        elif self.listWidget.currentRow() == 3:
+            self.data.updateCustomer(id = self.iDSpinBox_2.value(), name = self.nombreLineEdit_3.text(),\
+                last_name = self.apellidoLineEdit.text(), phone_number = self.nMeroTelefNicoLineEdit.text())
+            self.refreshUI()
         self.refresh_EditDeleteUI()
+
+    def delete_EditDeleteUI(self):
+        if self.listWidget.currentRow() == 0:
+            self.data.deletePrinter(self.spinBox_3.value())
+            self.refreshUI()
+        elif self.listWidget.currentRow() == 2:
+            self.data.deleteFilament(self.iDSpinBox.value())
+            self.refreshUI()
+        elif self.listWidget.currentRow() == 3:
+            self.data.deleteCustomer(self.iDSpinBox_2.value())
+            self.refreshUI()
     
     def resetItems(self, qobjects):
         

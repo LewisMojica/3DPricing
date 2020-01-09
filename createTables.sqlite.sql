@@ -2,7 +2,8 @@ CREATE TABLE "printers" (
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "name" VARCHAR(42)   NOT NULL,
     "deprecation" REAL   NOT NULL,
-    "default_electric_consumption" REAL   NOT NULL
+    "default_electric_consumption" REAL   NOT NULL,
+    "deleted" INTEGER NOT NULL DEFAULT 0
 );
 
 CREATE TABLE "filaments" (
@@ -12,6 +13,7 @@ CREATE TABLE "filaments" (
     "total_cost" REAL   NOT NULL,
     "length" INTEGER   NOT NULL,
     "material_name" VARCHAR(10)   NOT NULL,
+    "deleted" INTEGER NOT NULL DEFAULT 0,
     FOREIGN KEY(material_name) REFERENCES materials(name)
 );
 
@@ -42,7 +44,8 @@ CREATE TABLE "customers" (
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "name" VARCHAR(42)   NOT NULL,
     "last_name" VARCHAR(42),
-    "phone_number" INTEGER
+    "phone_number" VARCHAR(42),
+    "deleted" INTEGER NOT NULL DEFAULT 0
 );
 
 CREATE TABLE "filament_order" (

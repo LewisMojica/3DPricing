@@ -707,7 +707,7 @@
             <item>
              <widget class="QStackedWidget" name="stackedWidget_2">
               <property name="currentIndex">
-               <number>2</number>
+               <number>1</number>
               </property>
               <widget class="QWidget" name="blank"/>
               <widget class="QWidget" name="printer">
@@ -989,7 +989,65 @@
               <widget class="QWidget" name="Impresora">
                <layout class="QFormLayout" name="formLayout_8">
                 <item row="0" column="0">
-                 <layout class="QFormLayout" name="formLayout_7"/>
+                 <widget class="QLabel" name="printer_2">
+                  <property name="text">
+                   <string>Impresora</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QComboBox" name="impresoraComboBox_2"/>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QLabel" name="iDLabel">
+                  <property name="text">
+                   <string>ID</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QSpinBox" name="spinBox_3">
+                  <property name="readOnly">
+                   <bool>true</bool>
+                  </property>
+                  <property name="maximum">
+                   <number>99999</number>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="0">
+                 <widget class="QLabel" name="nombreLabel">
+                  <property name="text">
+                   <string>Nombre</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="1">
+                 <widget class="QLineEdit" name="nombreLineEdit"/>
+                </item>
+                <item row="3" column="0">
+                 <widget class="QLabel" name="consumoElCtricoPorDefectoLabel">
+                  <property name="text">
+                   <string>Consumo eléctrico por defecto</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="1">
+                 <widget class="QSpinBox" name="consumoElCtricoPorDefectoSpinBox"/>
+                </item>
+                <item row="4" column="0">
+                 <widget class="QLabel" name="costoDeUsoDepreciaciNLabel">
+                  <property name="text">
+                   <string>Costo de uso (depreciación)</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="1">
+                 <widget class="QDoubleSpinBox" name="costoDeUsoDepreciaciNDoubleSpinBox">
+                  <property name="maximum">
+                   <double>99999.000000000000000</double>
+                  </property>
+                 </widget>
                 </item>
                </layout>
               </widget>
@@ -1061,14 +1119,140 @@
               <widget class="QWidget" name="Carrete">
                <layout class="QFormLayout" name="formLayout_10">
                 <item row="0" column="0">
-                 <layout class="QFormLayout" name="formLayout_9"/>
+                 <widget class="QLabel" name="carreteLabel_2">
+                  <property name="text">
+                   <string>Carrete</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QComboBox" name="carreteComboBox"/>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QLabel" name="iDLabel_2">
+                  <property name="text">
+                   <string>ID</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QSpinBox" name="iDSpinBox">
+                  <property name="readOnly">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="0">
+                 <widget class="QLabel" name="nombreLabel_2">
+                  <property name="text">
+                   <string>Nombre</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="1">
+                 <widget class="QLineEdit" name="nombreLineEdit_2"/>
+                </item>
+                <item row="4" column="0">
+                 <widget class="QLabel" name="costoTotalLabel">
+                  <property name="text">
+                   <string>Costo total</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="1">
+                 <widget class="QDoubleSpinBox" name="costoTotalDoubleSpinBox"/>
+                </item>
+                <item row="5" column="0">
+                 <widget class="QLabel" name="gramosTotalesLabel">
+                  <property name="text">
+                   <string>Gramos totales</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="1">
+                 <widget class="QSpinBox" name="gramosTotalesSpinBox">
+                  <property name="maximum">
+                   <number>999999</number>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="0">
+                 <widget class="QLabel" name="materialLabel_4">
+                  <property name="text">
+                   <string>Material</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="1">
+                 <widget class="QLabel" name="label_7">
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                 </widget>
                 </item>
                </layout>
               </widget>
               <widget class="QWidget" name="Cliente">
                <layout class="QFormLayout" name="formLayout_12">
                 <item row="0" column="0">
-                 <layout class="QFormLayout" name="formLayout_11"/>
+                 <widget class="QLabel" name="clienteLabel">
+                  <property name="text">
+                   <string>Cliente</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QComboBox" name="clienteComboBox"/>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QLabel" name="iDLabel_3">
+                  <property name="text">
+                   <string>ID</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QSpinBox" name="iDSpinBox_2">
+                  <property name="wrapping">
+                   <bool>false</bool>
+                  </property>
+                  <property name="frame">
+                   <bool>true</bool>
+                  </property>
+                  <property name="readOnly">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="0">
+                 <widget class="QLabel" name="nombreLabel_3">
+                  <property name="text">
+                   <string>Nombre</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="1">
+                 <widget class="QLineEdit" name="nombreLineEdit_3"/>
+                </item>
+                <item row="3" column="0">
+                 <widget class="QLabel" name="apellidoLabel">
+                  <property name="text">
+                   <string>Apellido</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="1">
+                 <widget class="QLineEdit" name="apellidoLineEdit"/>
+                </item>
+                <item row="4" column="0">
+                 <widget class="QLabel" name="nMeroTelefNicoLabel">
+                  <property name="text">
+                   <string>Número telefónico</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="1">
+                 <widget class="QLineEdit" name="nMeroTelefNicoLineEdit"/>
                 </item>
                </layout>
               </widget>
