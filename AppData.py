@@ -1,5 +1,4 @@
-import sqlite3
-import time
+import sqlite3, json, time
 
 class Add:
     '''Esta clase contiene funciones para agregar impresora, filamentor e impresiones a la base de datos'''
@@ -7,6 +6,7 @@ class Add:
     def __init__(self, database_name='database.sqlite3'):
         self.con_db = sqlite3.connect(database_name)
         self.createTables()
+        self.config = json.load(open('config.json'))
 
 
     def getCreateScript(self):
@@ -49,6 +49,10 @@ class Add:
         result = cur.fetchall()
         cur.close()
         return result
+
+    def getConfig (self):
+        '''retorna el dict generado apartir de config.json'''
+        return self.config
 
     def updateRecords(self,table,values,where):
         cur = self.getCursor()
@@ -111,10 +115,11 @@ class Add:
         cursor_db.close()
         return order_id
 
-    def insertFilament_order(self, filament_id,order_id,length,printing_time,printer_id):
+    def insertFilament_order(self, filament_id,order_id,length,printing_time,printer_id, electricity_cost):
         '''agrega consumo de filamente a orden en base de datos'''
         cursor_db = self.getCursor()
-        cursor_db.execute(f'INSERT INTO filament_order (filament_id,order_id,length,printing_time,printer_id) VALUES({filament_id},{order_id},{length},{printing_time},{printer_id})')
+        cursor_db.execute(f'INSERT INTO filament_order (filament_id,order_id,length,printing_time,printer_id, electricity_cost) \
+            VALUES({filament_id},{order_id},{length},{printing_time},{printer_id}, {electricity_cost})')
         self.con_db.commit()
         cursor_db.close()
 
@@ -191,7 +196,5 @@ class Add:
         self.deleteRecords('filaments',f'id={id}')
 
 if __name__ == '__main__':
-    a = Add()
-    print(a.getPrinters())
-    a.deletePrinter(3)
-    print(a.getPrinters())
+    pass
+    

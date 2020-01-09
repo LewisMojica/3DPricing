@@ -5,6 +5,6 @@
     <file>icons/casa.png</file>
     <file>icons/etiqueta-del-precio.png</file>
     <file>icons/inventario.png</file>
-    <file>icons/main_icon.icon</file>
+    <file>icons/main_icon.png</file>
   </qresource>
 </RCC>
