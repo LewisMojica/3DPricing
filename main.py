@@ -349,16 +349,18 @@ class Window(Ui_MainWindow):
         material_name = self.current_materials_CreateOrderUI[self.materialComboBox.currentIndex()][0]
         printing_time = (self.spinBox_5.value() + self.spinBox_4.value()/60)
         filament = self.current_filaments_CreateOrderUI[self.filament_comboBox.currentIndex()]
+        electricity_cost_kw_per_hour = self.data.getConfig()['electricity_cost']
+        depreciation = printer[2]
         try:
-            electricity_cost_per_hour = self.data.getMaterialsConsumptions('consumption',f'printer_id={printer[0]} AND material_name="{material_name}"')[0][0]
+            electricity_consumption = self.data.getMaterialsConsumptions('consumption',f'printer_id={printer[0]} AND material_name="{material_name}"')[0][0]
         except IndexError:
-            electricity_cost_per_hour = printer[3]
+            electricity_consumption = printer[3]
         printer_operation_cost = printer[2]*printing_time
         material_cost_per_gram = filament[3]/filament[4]
         material_cost = material_cost_per_gram*self.spinBox_6.value()
-        electricity_cost = printing_time*electricity_cost_per_hour
+        electricity_cost = printing_time*electricity_consumption*electricity_cost_kw_per_hour
 
-        return (printer_operation_cost + material_cost + electricity_cost + human_time*human_time_cost)
+        return (printer_operation_cost + material_cost + electricity_cost + human_time*human_time_cost + depreciation*printing_time)
 
             
     def createWholeOrder(self):
@@ -369,7 +371,7 @@ class Window(Ui_MainWindow):
         order_id = self.data.insertOrder(*self.getOrderInfo())
 
         self.data.insertHuman_labor(order_id,*self.getHumanLaborInfo())
-        self.data.insertFilament_order(filament_id,order_id,grams_of_material,printing_time,printer_id)
+        self.data.insertFilament_order(filament_id,order_id,grams_of_material,printing_time,printer_id, self.data.getConfig()['electricity_cost'])
 
         self.update_CreateOrderUI()
 

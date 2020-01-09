@@ -54,6 +54,7 @@ CREATE TABLE "filament_order" (
     "length" INTEGER NOT NULL,
     "printing_time" INTEGER NOT NULL,
     "printer_id" INTEGER NOT NULL,
+    "electricity_cost" REAL NOT NULL,
     UNIQUE (filament_id,order_id),
     FOREIGN KEY(order_id) REFERENCES orders(id),
     FOREIGN KEY(filament_id) REFERENCES filaments(id),

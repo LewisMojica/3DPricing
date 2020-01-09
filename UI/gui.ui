@@ -15,7 +15,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="../imgs/resources.qrc">
-    <normaloff>:/icons/icons/main_icon.icon</normaloff>:/icons/icons/main_icon.icon</iconset>
+    <normaloff>:/icons/icons/main_icon.png</normaloff>:/icons/icons/main_icon.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_2">
@@ -731,16 +731,6 @@
                     </property>
                    </widget>
                   </item>
-                  <item row="1" column="1">
-                   <widget class="QSpinBox" name="spinBox">
-                    <property name="suffix">
-                     <string> $/hora</string>
-                    </property>
-                    <property name="maximum">
-                     <number>99999</number>
-                    </property>
-                   </widget>
-                  </item>
                   <item row="2" column="0">
                    <widget class="QLabel" name="consumoDeElectricidadLabel">
                     <property name="text">
@@ -748,13 +738,32 @@
                     </property>
                    </widget>
                   </item>
+                  <item row="1" column="1">
+                   <widget class="QDoubleSpinBox" name="spinBox">
+                    <property name="suffix">
+                     <string> $/h</string>
+                    </property>
+                    <property name="maximum">
+                     <double>999999.000000000000000</double>
+                    </property>
+                   </widget>
+                  </item>
                   <item row="2" column="1">
-                   <widget class="QSpinBox" name="consumoDeElectricidadSpinBox">
+                   <widget class="QDoubleSpinBox" name="consumoDeElectricidadSpinBox">
                     <property name="suffix">
                      <string> kW/h/h</string>
                     </property>
+                    <property name="decimals">
+                     <number>3</number>
+                    </property>
                     <property name="maximum">
-                     <number>99999</number>
+                     <double>999999.000000000000000</double>
+                    </property>
+                    <property name="singleStep">
+                     <double>0.010000000000000</double>
+                    </property>
+                    <property name="value">
+                     <double>0.000000000000000</double>
                     </property>
                    </widget>
                   </item>
@@ -984,7 +993,7 @@
             <item>
              <widget class="QStackedWidget" name="stackedWidget_3">
               <property name="currentIndex">
-               <number>3</number>
+               <number>0</number>
               </property>
               <widget class="QWidget" name="Impresora">
                <layout class="QFormLayout" name="formLayout_8">
@@ -1032,9 +1041,6 @@
                   </property>
                  </widget>
                 </item>
-                <item row="3" column="1">
-                 <widget class="QSpinBox" name="consumoElCtricoPorDefectoSpinBox"/>
-                </item>
                 <item row="4" column="0">
                  <widget class="QLabel" name="costoDeUsoDepreciaciNLabel">
                   <property name="text">
@@ -1044,8 +1050,30 @@
                 </item>
                 <item row="4" column="1">
                  <widget class="QDoubleSpinBox" name="costoDeUsoDepreciaciNDoubleSpinBox">
+                  <property name="prefix">
+                   <string/>
+                  </property>
+                  <property name="suffix">
+                   <string> $/h</string>
+                  </property>
                   <property name="maximum">
                    <double>99999.000000000000000</double>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="1">
+                 <widget class="QDoubleSpinBox" name="consumoElCtricoPorDefectoSpinBox">
+                  <property name="suffix">
+                   <string> kW/h/h</string>
+                  </property>
+                  <property name="decimals">
+                   <number>3</number>
+                  </property>
+                  <property name="maximum">
+                   <double>999999.000000000000000</double>
+                  </property>
+                  <property name="singleStep">
+                   <double>0.010000000000000</double>
                   </property>
                  </widget>
                 </item>
@@ -1082,19 +1110,6 @@
                     </property>
                    </widget>
                   </item>
-                  <item row="2" column="1">
-                   <widget class="QSpinBox" name="costoDeElectricidadSpinBox">
-                    <property name="readOnly">
-                     <bool>true</bool>
-                    </property>
-                    <property name="suffix">
-                     <string> kW/h/h</string>
-                    </property>
-                    <property name="maximum">
-                     <number>99999</number>
-                    </property>
-                   </widget>
-                  </item>
                   <item row="3" column="0">
                    <widget class="QLabel" name="cambiarCostoDeElectricidadALabel">
                     <property name="text">
@@ -1102,13 +1117,29 @@
                     </property>
                    </widget>
                   </item>
-                  <item row="3" column="1">
-                   <widget class="QSpinBox" name="cambiarCostoDeElectricidadASpinBox">
+                  <item row="2" column="1">
+                   <widget class="QDoubleSpinBox" name="costoDeElectricidadSpinBox">
                     <property name="suffix">
                      <string> kW/h/h</string>
                     </property>
+                    <property name="decimals">
+                     <number>3</number>
+                    </property>
                     <property name="maximum">
-                     <number>99999</number>
+                     <double>999999.000000000000000</double>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="3" column="1">
+                   <widget class="QDoubleSpinBox" name="cambiarCostoDeElectricidadASpinBox">
+                    <property name="suffix">
+                     <string> kW/h/h</string>
+                    </property>
+                    <property name="decimals">
+                     <number>3</number>
+                    </property>
+                    <property name="maximum">
+                     <double>999999.000000000000000</double>
                     </property>
                    </widget>
                   </item>
@@ -1160,7 +1191,11 @@
                  </widget>
                 </item>
                 <item row="4" column="1">
-                 <widget class="QDoubleSpinBox" name="costoTotalDoubleSpinBox"/>
+                 <widget class="QDoubleSpinBox" name="costoTotalDoubleSpinBox">
+                  <property name="prefix">
+                   <string>$ </string>
+                  </property>
+                 </widget>
                 </item>
                 <item row="5" column="0">
                  <widget class="QLabel" name="gramosTotalesLabel">
@@ -1171,6 +1206,12 @@
                 </item>
                 <item row="5" column="1">
                  <widget class="QSpinBox" name="gramosTotalesSpinBox">
+                  <property name="suffix">
+                   <string> g</string>
+                  </property>
+                  <property name="prefix">
+                   <string/>
+                  </property>
                   <property name="maximum">
                    <number>999999</number>
                   </property>
