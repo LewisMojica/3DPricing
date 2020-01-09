@@ -1,11 +1,18 @@
 from UI.MainW import Ui_MainWindow
 from PyQt5.QtWidgets import QApplication, QMainWindow
+from PyQt5.QtGui import QIntValidator
 
 import AppData
 
 class Window(Ui_MainWindow):
     def setupUi(self, MainWindow):
         super().setupUi(MainWindow)
+
+        only_int = (self.nMeroTelefNicoLineEdit, self.phoneNumberLineEdit)
+        for i in only_int:
+            i.setValidator(QIntValidator())
+
+
         self.data = AppData.Add()
 
         #CreateOrderUI
