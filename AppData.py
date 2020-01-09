@@ -56,12 +56,16 @@ class Add:
         print(a)
         cur.execute(a)
         self.con_db.commit()
-        
+
+    def deleteRecords(self,table,where):
+        self.updateRecords(table, 'deleted=1', f'{where}')
+
 
     def insertPrinter(self, name, deprecation, electric_consumption):
         '''agrega nueva impresora a base de datos'''
         cursor_db = self.getCursor()
         cursor_db.execute(f'INSERT INTO printers (name, deprecation, default_electric_consumption) VALUES ("{name}",{deprecation},{electric_consumption})')
+
         self.con_db.commit()
         cursor_db.close()
 
@@ -82,8 +86,10 @@ class Add:
 
     def insertCustomer(self, name, last_name, phone_number='NULL'):
         '''agrega nuevo cliente a base de datos'''
+        if phone_number == '':
+            phone_number = 'NULL'
         cursor_db = self.getCursor()
-        cursor_db.execute(f'INSERT INTO customers (name, last_name, phone_number) VALUES("{name}","{last_name}",{phone_number})')
+        cursor_db.execute(f'INSERT INTO customers (name, last_name, phone_number) VALUES("{name}","{last_name}","{phone_number}")')
         self.con_db.commit()
         cursor_db.close()
 
@@ -121,26 +127,40 @@ class Add:
         cursor_db.close()
 
 
-    def getMaterials(self,columns='*',where=None):
+    def getMaterials(self, columns = '*', where = None):
         '''retorna una lista de las columnas especificadas de todos los records de la tabla materials'''
-        return self.getRecords('materials',columns,where)
+        return self.getRecords('materials', columns, where)
 
-    def getPrinters(self,columns='*',where=None):
+    def getPrinters(self, columns = '*', where = None, show_deleted=False):
         '''retorna un tuple con los nombres de los impresoras existentes'''
-        return self.getRecords('printers',columns,where)
+        if where == None:
+            return self.getRecords('printers', columns,f'deleted={int(show_deleted)}')
+        else:
+            return self.getRecords('printers', columns, where + f' AND deleted={int(show_deleted)}')
 
-    def getCustomers(self,columns='*',where=None):
+    def getCustomers(self, columns = '*', where = None, show_deleted = False):
         '''retorna un tuple con los nombres de los clientes existentes'''
-        return self.getRecords('customers',columns,where)
+        if where == None:
+            return self.getRecords('customers', columns, f'deleted={int(show_deleted)}')
+        else:
+            return self.getRecords('customers', columns, where + f' AND deleted={int(show_deleted)}')
 
-    def getFilaments(self,columns='*',where=None):
+    def getFilaments(self, columns = '*', where = None, show_deleted = False):
         '''retorna un tuple con los nombres de los clientes existentes'''
-        return self.getRecords('filaments',columns,where)
+        if where == None:
+            return self.getRecords('filaments', columns, f'deleted={int(show_deleted)}')    
+        else:
+            return self.getRecords('filaments', columns,where + f' AND deleted={int(show_deleted)}')
 
-    def getMaterialsConsumptions(self,columns='*',where=None):
+    def getMaterialsConsumptions(self, columns='*', where=None):
         '''retorna una lista con los records que cumplen con la condicion dada con where, si no hay condicion
         se retornan todos los record'''
-        return self.getRecords('materials_consumptions',columns,where)
+        return self.getRecords('materials_consumptions', columns,where)
+
+    def getOrders(self,columns='*', where=None):
+        '''retorna una lista con los records que cumplen con la condicion dada con where, si no hay condicion
+        se retornan todos los record'''
+        return self.getRecords('orders',columns,where)
 
     def setMaterialConsumption(self,consumption,material_name,printer_id):
         '''crea un records en la tabla materials_consumptions, si el records ya existe, entonces lo modifica'''
@@ -148,3 +168,30 @@ class Add:
             self.insertMaterial_consumption(material_name,printer_id,consumption)
         else:
             self.updateRecords('materials_consumptions',f'consumption={consumption}',f'printer_id={printer_id} AND material_name="{material_name}"')
+    
+    def updateCustomer(self,id,name,last_name,phone_number):
+        '''modifica a un record de la tabla customers'''
+        self.updateRecords('customers',f'name="{name}", last_name="{last_name}", phone_number="{phone_number}"',f'id={id}')
+    
+    def updatePrinter(self, id, name, depreciation, consumption):
+        '''modifica a un record de la tabla printers'''
+        self.updateRecords('printers',f'name="{name}", deprecation={depreciation}, default_electric_consumption={consumption}',f'id={id}')
+    
+    def updateFilament(self, id, name, total_cost, weight):
+        '''modifica a un record de la tabla printers'''
+        self.updateRecords('filaments',f'name="{name}", total_cost={total_cost}, length={weight}',f'id={id}')
+
+    def deleteCustomer(self,id):
+        self.deleteRecords('customers',f'id={id}')
+
+    def deletePrinter(self,id):
+        self.deleteRecords('printers',f'id={id}')
+    
+    def deleteFilament(self,id):
+        self.deleteRecords('filaments',f'id={id}')
+
+if __name__ == '__main__':
+    a = Add()
+    print(a.getPrinters())
+    a.deletePrinter(3)
+    print(a.getPrinters())
