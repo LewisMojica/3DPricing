@@ -3,10 +3,10 @@ import sqlite3, json, time
 class Add:
     '''Esta clase contiene funciones para agregar impresora, filamentor e impresiones a la base de datos'''
 
-    def __init__(self, database_name='database.sqlite3'):
-        self.con_db = sqlite3.connect(database_name)
-        self.createTables()
+    def __init__(self):
         self.config = json.load(open('config.json'))
+        self.con_db = sqlite3.connect(self.config['path_to_data_base'])
+        self.createTables()
 
 
     def getCreateScript(self):
