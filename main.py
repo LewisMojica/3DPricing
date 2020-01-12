@@ -350,7 +350,6 @@ class Window(Ui_MainWindow):
         printing_time = (self.spinBox_5.value() + self.spinBox_4.value()/60)
         filament = self.current_filaments_CreateOrderUI[self.filament_comboBox.currentIndex()]
         electricity_cost_kw_per_hour = self.data.getConfig()['electricity_cost']
-        depreciation = printer[2]
         try:
             electricity_consumption = self.data.getMaterialsConsumptions('consumption',f'printer_id={printer[0]} AND material_name="{material_name}"')[0][0]
         except IndexError:
@@ -360,7 +359,7 @@ class Window(Ui_MainWindow):
         material_cost = material_cost_per_gram*self.spinBox_6.value()
         electricity_cost = printing_time*electricity_consumption*electricity_cost_kw_per_hour
 
-        return (printer_operation_cost + material_cost + electricity_cost + human_time*human_time_cost + depreciation*printing_time)
+        return (printer_operation_cost + material_cost + electricity_cost + human_time*human_time_cost)
 
             
     def createWholeOrder(self):
