@@ -22,7 +22,7 @@
     <item row="0" column="2">
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>3</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="start">
        <layout class="QGridLayout" name="gridLayout_4">
@@ -707,7 +707,7 @@
             <item>
              <widget class="QStackedWidget" name="stackedWidget_2">
               <property name="currentIndex">
-               <number>1</number>
+               <number>0</number>
               </property>
               <widget class="QWidget" name="blank"/>
               <widget class="QWidget" name="printer">
@@ -751,7 +751,7 @@
                   <item row="2" column="1">
                    <widget class="QDoubleSpinBox" name="consumoDeElectricidadSpinBox">
                     <property name="suffix">
-                     <string> kW/h/h</string>
+                     <string> kWh/h</string>
                     </property>
                     <property name="decimals">
                      <number>3</number>
@@ -993,7 +993,7 @@
             <item>
              <widget class="QStackedWidget" name="stackedWidget_3">
               <property name="currentIndex">
-               <number>0</number>
+               <number>1</number>
               </property>
               <widget class="QWidget" name="Impresora">
                <layout class="QFormLayout" name="formLayout_8">
@@ -1064,7 +1064,7 @@
                 <item row="3" column="1">
                  <widget class="QDoubleSpinBox" name="consumoElCtricoPorDefectoSpinBox">
                   <property name="suffix">
-                   <string> kW/h/h</string>
+                   <string> kWh/h</string>
                   </property>
                   <property name="decimals">
                    <number>3</number>
@@ -1120,7 +1120,7 @@
                   <item row="2" column="1">
                    <widget class="QDoubleSpinBox" name="costoDeElectricidadSpinBox">
                     <property name="suffix">
-                     <string> kW/h/h</string>
+                     <string> kWh/h</string>
                     </property>
                     <property name="decimals">
                      <number>3</number>
@@ -1133,7 +1133,7 @@
                   <item row="3" column="1">
                    <widget class="QDoubleSpinBox" name="cambiarCostoDeElectricidadASpinBox">
                     <property name="suffix">
-                     <string> kW/h/h</string>
+                     <string> kWh/h</string>
                     </property>
                     <property name="decimals">
                      <number>3</number>
@@ -1385,6 +1385,9 @@
     <addaction name="action3DPricing"/>
    </widget>
    <widget class="QMenu" name="add">
+    <property name="tearOffEnabled">
+     <bool>false</bool>
+    </property>
     <property name="title">
      <string>Añadir</string>
     </property>
@@ -1401,6 +1404,12 @@
   <action name="actionPreferencias">
    <property name="text">
     <string>Preferencias</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+P</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
    </property>
   </action>
   <action name="actionCarretes">

@@ -5,6 +5,30 @@ from PyQt5.QtGui import QIntValidator
 
 import AppData
 
+class Settings_window(settings.Ui_Form):
+    def setupUi(self, qobject, add_object):
+        super().setupUi(qobject)
+        self.data = add_object
+        self.connect_all()
+        
+        self.updateValues()
+
+    def updateValues(self):
+        config = self.data.getConfig()
+        self.label_2.setText(config['path_to_data_base'])
+        self.label.setText(config['path_to_files_storage'])
+        self.doubleSpinBox.setValue(config['electricity_cost'])
+        self.precioDeTrabajoHumanoDoubleSpinBox.setValue(self.data.getPrinters(where='name="human"')[0][2])
+        
+
+    def connect_all(self):
+        self.pushButton.clicked.connect(self.acep)
+
+    def acep(self):
+        print("asdf")
+        
+
+
 class Window(Ui_MainWindow):
     def setupUi(self, MainWindow):
         super().setupUi(MainWindow)
@@ -25,7 +49,7 @@ class Window(Ui_MainWindow):
         self.source_code_dialog = QDialog(MainWindow)
         source_code_dialog.Ui_Dialog().setupUi(self.source_code_dialog)
         self.settings_window = QDialog(MainWindow)
-        settings.Ui_Form().setupUi(self.settings_window)
+        Settings_window().setupUi(self.settings_window, self.data)
 
         #CreateOrderUI
         '''impresoras en el combobox'''
@@ -497,4 +521,10 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    a = AppData.Add()
+    app = QApplication([])
+    wid = QWidget()
+    Settings_window().setupUi(wid,a)
+    wid.show()
+    app.exec_()
+    #main()
