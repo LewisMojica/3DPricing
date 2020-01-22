@@ -1,5 +1,6 @@
 from UI.MainW import Ui_MainWindow
-from PyQt5.QtWidgets import QApplication, QMainWindow
+from UI import _3dpricing_dialog, licence_dialog, source_code_dialog, settings
+from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, QWidget
 from PyQt5.QtGui import QIntValidator
 
 import AppData
@@ -14,6 +15,17 @@ class Window(Ui_MainWindow):
 
 
         self.data = AppData.Add()
+
+
+        #dialogs
+        self._3dpricing_dialog = QDialog(MainWindow)
+        _3dpricing_dialog.Ui_Dialog().setupUi(self._3dpricing_dialog)
+        self.licence_dialog = QDialog(MainWindow)
+        licence_dialog.Ui_Dialog().setupUi(self.licence_dialog)
+        self.source_code_dialog = QDialog(MainWindow)
+        source_code_dialog.Ui_Dialog().setupUi(self.source_code_dialog)
+        self.settings_window = QDialog(MainWindow)
+        settings.Ui_Form().setupUi(self.settings_window)
 
         #CreateOrderUI
         '''impresoras en el combobox'''
@@ -103,6 +115,21 @@ class Window(Ui_MainWindow):
         self.pushButton_5.clicked.connect(self.delete_EditDeleteUI)\
 
         self.carreteComboBox.currentIndexChanged.connect(self.refresh_EditDeleteUI)
+
+        #menubar
+        self.actionLicence.triggered.connect(self.licence_dialog.show)
+        self.actionC_digo_Fuente.triggered.connect(self.source_code_dialog.show)
+        self.action3DPricing.triggered.connect(self._3dpricing_dialog.show)
+
+        self.actionImpresora_2.triggered.connect(self.show_add_printer_ui)
+        self.actionCliente_2.triggered.connect(self.show_add_customer_ui)
+        self.actionCarrete.triggered.connect(self.show_add_filament_ui)
+        self.actionOrden.triggered.connect(self.show_new_order_ui)
+        
+        self.actionImpresora.triggered.connect(self.show_edit_printer_ui)
+        self.actionCarretes.triggered.connect(self.show_edit_filament_ui)
+        self.actionCliente.triggered.connect(self.show_edit_customer_ui)
+        self.actionPreferencias.triggered.connect(self.settings_window.show)
 
 
     def refreshUI(self):
@@ -425,6 +452,40 @@ class Window(Ui_MainWindow):
     def swTo_AddEdit_delete(self):
         self.stackedWidget.setCurrentWidget(self.edit_delete)
 
+
+    #menubar
+    def show_new_order_ui(self):
+        self.stackedWidget.setCurrentIndex(1)
+    def show_add_ui(self):
+        self.stackedWidget.setCurrentIndex(2)
+    def show_edit_ui(self):
+        self.stackedWidget.setCurrentIndex(3)
+    
+    def show_add_printer_ui(self):
+        self.show_add_ui()
+        self.listWidget_SelectNewItem.setCurrentRow(0)
+    def show_add_filament_ui(self):
+        self.show_add_ui()
+        self.listWidget_SelectNewItem.setCurrentRow(1)
+    def show_add_customer_ui(self):
+        self.show_add_ui()
+        self.listWidget_SelectNewItem.setCurrentRow(2)
+
+    def show_edit_printer_ui(self):
+        self.show_edit_ui()
+        self.listWidget.setCurrentRow(0)
+    def show_edit_material_ui(self):
+        self.show_edit_ui()
+        self.listWidget.setCurrentRow(1)
+    def show_edit_filament_ui(self):
+        self.show_edit_ui()
+        self.listWidget.setCurrentRow(2)
+    def show_edit_customer_ui(self):
+        self.show_edit_ui()
+        self.listWidget.setCurrentRow(3)
+
+    
+
 def main():
     
     app = QApplication([])
@@ -433,7 +494,6 @@ def main():
 
     tmp.setupUi(win)
     win.show()
-
     app.exec_()
 
 

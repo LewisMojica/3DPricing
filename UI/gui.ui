@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>780</width>
+    <width>828</width>
     <height>658</height>
    </rect>
   </property>
@@ -1362,12 +1362,97 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>780</width>
-     <height>23</height>
+     <width>828</width>
+     <height>22</height>
     </rect>
    </property>
+   <widget class="QMenu" name="edit">
+    <property name="title">
+     <string>Editar/Eliminar</string>
+    </property>
+    <addaction name="actionImpresora"/>
+    <addaction name="actionCarretes"/>
+    <addaction name="actionCliente"/>
+    <addaction name="separator"/>
+    <addaction name="actionPreferencias"/>
+   </widget>
+   <widget class="QMenu" name="about">
+    <property name="title">
+     <string>Sobre 3DPricing</string>
+    </property>
+    <addaction name="actionLicence"/>
+    <addaction name="actionC_digo_Fuente"/>
+    <addaction name="action3DPricing"/>
+   </widget>
+   <widget class="QMenu" name="add">
+    <property name="title">
+     <string>Añadir</string>
+    </property>
+    <addaction name="actionOrden"/>
+    <addaction name="actionImpresora_2"/>
+    <addaction name="actionCarrete"/>
+    <addaction name="actionCliente_2"/>
+   </widget>
+   <addaction name="add"/>
+   <addaction name="edit"/>
+   <addaction name="about"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionPreferencias">
+   <property name="text">
+    <string>Preferencias</string>
+   </property>
+  </action>
+  <action name="actionCarretes">
+   <property name="text">
+    <string>Carretes</string>
+   </property>
+  </action>
+  <action name="actionCliente">
+   <property name="text">
+    <string>Cliente</string>
+   </property>
+  </action>
+  <action name="actionImpresora">
+   <property name="text">
+    <string>Impresora</string>
+   </property>
+  </action>
+  <action name="actionLicence">
+   <property name="text">
+    <string>Licencia</string>
+   </property>
+  </action>
+  <action name="actionC_digo_Fuente">
+   <property name="text">
+    <string>Código Fuente</string>
+   </property>
+  </action>
+  <action name="actionImpresora_2">
+   <property name="text">
+    <string>Impresora</string>
+   </property>
+  </action>
+  <action name="actionCliente_2">
+   <property name="text">
+    <string>Cliente</string>
+   </property>
+  </action>
+  <action name="actionCarrete">
+   <property name="text">
+    <string>Carrete</string>
+   </property>
+  </action>
+  <action name="action3DPricing">
+   <property name="text">
+    <string>3DPricing</string>
+   </property>
+  </action>
+  <action name="actionOrden">
+   <property name="text">
+    <string>Orden</string>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="../imgs/resources.qrc"/>

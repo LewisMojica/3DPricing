@@ -1,19 +1,17 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'UI/gui.ui'
+# Form implementation generated from reading ui file 'gui.ui'
 #
-# Created by: PyQt5 UI code generator 5.13.2
+# Created by: PyQt5 UI code generator 5.10.1
 #
 # WARNING! All changes made in this file will be lost!
 
-
 from PyQt5 import QtCore, QtGui, QtWidgets
-
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(780, 658)
+        MainWindow.resize(828, 658)
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(":/icons/icons/main_icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         MainWindow.setWindowIcon(icon)
@@ -653,12 +651,55 @@ class Ui_MainWindow(object):
         self.gridLayout_2.addWidget(self.stackedWidget, 0, 2, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 780, 23))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 828, 22))
         self.menubar.setObjectName("menubar")
+        self.edit = QtWidgets.QMenu(self.menubar)
+        self.edit.setObjectName("edit")
+        self.about = QtWidgets.QMenu(self.menubar)
+        self.about.setObjectName("about")
+        self.add = QtWidgets.QMenu(self.menubar)
+        self.add.setObjectName("add")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
+        self.actionPreferencias = QtWidgets.QAction(MainWindow)
+        self.actionPreferencias.setObjectName("actionPreferencias")
+        self.actionCarretes = QtWidgets.QAction(MainWindow)
+        self.actionCarretes.setObjectName("actionCarretes")
+        self.actionCliente = QtWidgets.QAction(MainWindow)
+        self.actionCliente.setObjectName("actionCliente")
+        self.actionImpresora = QtWidgets.QAction(MainWindow)
+        self.actionImpresora.setObjectName("actionImpresora")
+        self.actionLicence = QtWidgets.QAction(MainWindow)
+        self.actionLicence.setObjectName("actionLicence")
+        self.actionC_digo_Fuente = QtWidgets.QAction(MainWindow)
+        self.actionC_digo_Fuente.setObjectName("actionC_digo_Fuente")
+        self.actionImpresora_2 = QtWidgets.QAction(MainWindow)
+        self.actionImpresora_2.setObjectName("actionImpresora_2")
+        self.actionCliente_2 = QtWidgets.QAction(MainWindow)
+        self.actionCliente_2.setObjectName("actionCliente_2")
+        self.actionCarrete = QtWidgets.QAction(MainWindow)
+        self.actionCarrete.setObjectName("actionCarrete")
+        self.action3DPricing = QtWidgets.QAction(MainWindow)
+        self.action3DPricing.setObjectName("action3DPricing")
+        self.actionOrden = QtWidgets.QAction(MainWindow)
+        self.actionOrden.setObjectName("actionOrden")
+        self.edit.addAction(self.actionImpresora)
+        self.edit.addAction(self.actionCarretes)
+        self.edit.addAction(self.actionCliente)
+        self.edit.addSeparator()
+        self.edit.addAction(self.actionPreferencias)
+        self.about.addAction(self.actionLicence)
+        self.about.addAction(self.actionC_digo_Fuente)
+        self.about.addAction(self.action3DPricing)
+        self.add.addAction(self.actionOrden)
+        self.add.addAction(self.actionImpresora_2)
+        self.add.addAction(self.actionCarrete)
+        self.add.addAction(self.actionCliente_2)
+        self.menubar.addAction(self.add.menuAction())
+        self.menubar.addAction(self.edit.menuAction())
+        self.menubar.addAction(self.about.menuAction())
 
         self.retranslateUi(MainWindow)
         self.stackedWidget.setCurrentIndex(3)
@@ -774,4 +815,19 @@ class Ui_MainWindow(object):
         self.nMeroTelefNicoLabel.setText(_translate("MainWindow", "Número telefónico"))
         self.pushButton_5.setText(_translate("MainWindow", "Eliminar"))
         self.pushButton.setText(_translate("MainWindow", "Guardar cambios"))
+        self.edit.setTitle(_translate("MainWindow", "Editar/Eliminar"))
+        self.about.setTitle(_translate("MainWindow", "Sobre 3DPricing"))
+        self.add.setTitle(_translate("MainWindow", "Añadir"))
+        self.actionPreferencias.setText(_translate("MainWindow", "Preferencias"))
+        self.actionCarretes.setText(_translate("MainWindow", "Carretes"))
+        self.actionCliente.setText(_translate("MainWindow", "Cliente"))
+        self.actionImpresora.setText(_translate("MainWindow", "Impresora"))
+        self.actionLicence.setText(_translate("MainWindow", "Licencia"))
+        self.actionC_digo_Fuente.setText(_translate("MainWindow", "Código Fuente"))
+        self.actionImpresora_2.setText(_translate("MainWindow", "Impresora"))
+        self.actionCliente_2.setText(_translate("MainWindow", "Cliente"))
+        self.actionCarrete.setText(_translate("MainWindow", "Carrete"))
+        self.action3DPricing.setText(_translate("MainWindow", "3DPricing"))
+        self.actionOrden.setText(_translate("MainWindow", "Orden"))
+
 import resources_rc
