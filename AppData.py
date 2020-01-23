@@ -54,6 +54,10 @@ class Add:
         '''retorna el dict generado apartir de config.json'''
         return self.config
 
+    def changeConfig(self, new_config):
+        with open('config.json','w') as config_file:
+            json.dump(new_config, config_file, indent=4, sort_keys=True)
+
     def updateRecords(self,table,values,where):
         cur = self.getCursor()
         a = f'UPDATE {table} SET {values} WHERE {where}'

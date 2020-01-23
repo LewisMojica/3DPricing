@@ -84,7 +84,7 @@ class Ui_Form(object):
         self.baseDeDatosLabel.setText(_translate("Form", "Base de datos:"))
         self.toolButton.setText(_translate("Form", "..."))
         self.precioDeElectricidadLabel.setText(_translate("Form", "Precio de electricidad:"))
-        self.doubleSpinBox.setSuffix(_translate("Form", " kWh/h"))
+        self.doubleSpinBox.setSuffix(_translate("Form", " $/kWh"))
         self.precioDeTrabajoHumanoLabel.setText(_translate("Form", "Precio de trabajo (humano):"))
         self.precioDeTrabajoHumanoDoubleSpinBox.setSuffix(_translate("Form", " $/h"))
         self.pushButton.setText(_translate("Form", "Descartar"))

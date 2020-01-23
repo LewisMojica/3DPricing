@@ -85,7 +85,7 @@
         <string/>
        </property>
        <property name="suffix">
-        <string> kWh/h</string>
+        <string> $/kWh</string>
        </property>
        <property name="maximum">
         <double>99999999.989999994635582</double>

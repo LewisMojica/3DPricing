@@ -1,6 +1,6 @@
 from UI.MainW import Ui_MainWindow
 from UI import _3dpricing_dialog, licence_dialog, source_code_dialog, settings
-from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, QWidget
+from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, QWidget, QFileDialog
 from PyQt5.QtGui import QIntValidator
 
 import AppData
@@ -8,6 +8,7 @@ import AppData
 class Settings_window(settings.Ui_Form):
     def setupUi(self, qobject, add_object):
         super().setupUi(qobject)
+        self.qobject = qobject
         self.data = add_object
         self.connect_all()
         
@@ -18,14 +19,39 @@ class Settings_window(settings.Ui_Form):
         self.label_2.setText(config['path_to_data_base'])
         self.label.setText(config['path_to_files_storage'])
         self.doubleSpinBox.setValue(config['electricity_cost'])
-        self.precioDeTrabajoHumanoDoubleSpinBox.setValue(self.data.getPrinters(where='name="human"')[0][2])
+        self.precioDeTrabajoHumanoDoubleSpinBox.setValue(config['human_time_cost'])
         
 
     def connect_all(self):
-        self.pushButton.clicked.connect(self.acep)
+        self.pushButton_2.clicked.connect(self.save_changes)
+        self.pushButton.clicked.connect(self.close_dialog)
 
-    def acep(self):
-        print("asdf")
+        self.toolButton_2.clicked.connect(self.show_file_dialog_db)
+        self.toolButton.clicked.connect(self.show_file_dialog_orders_files)
+
+    def save_changes(self):
+        config = self.data.getConfig()
+        config['electricity_cost'] = round(self.doubleSpinBox.value(), 2) 
+        config['path_to_data_base'] = self.label_2.text()
+        config['path_to_files_storage'] = self.label.text()
+        config['human_time_cost'] = round(self.precioDeTrabajoHumanoDoubleSpinBox.value(), 2)
+        self.data.changeConfig(config)
+
+        self.updateValues()
+        self.qobject.close()
+    
+    def close_dialog(self):
+        self.qobject.close()
+
+    '''dialog para buscar carpeta de la base de datos'''
+    def show_file_dialog_db(self):
+        dir = QFileDialog.getExistingDirectory(self.qobject, "Select Directory")
+        self.label_2.setText(str(dir))
+
+    def show_file_dialog_orders_files(self):
+        dir = QFileDialog.getExistingDirectory(self.qobject, "Select Directory")
+        self.label.setText(str(dir))
+    
         
 
 
@@ -48,8 +74,10 @@ class Window(Ui_MainWindow):
         licence_dialog.Ui_Dialog().setupUi(self.licence_dialog)
         self.source_code_dialog = QDialog(MainWindow)
         source_code_dialog.Ui_Dialog().setupUi(self.source_code_dialog)
+
         self.settings_window = QDialog(MainWindow)
-        Settings_window().setupUi(self.settings_window, self.data)
+        self.setupui = Settings_window()
+        self.setupui.setupUi(self.settings_window, self.data)
 
         #CreateOrderUI
         '''impresoras en el combobox'''
@@ -172,7 +200,7 @@ class Window(Ui_MainWindow):
         self.resetItems(self.items_to_clear_createOrder)
         
         self.prippComboBox.blockSignals(True)
-        self.current_printers_CreateOrderUI = self.data.getPrinters()[1:]
+        self.current_printers_CreateOrderUI = self.data.getPrinters()
         self.prippComboBox.insertItems(0,[x[1] for x in self.current_printers_CreateOrderUI])
         self.prippComboBox.blockSignals(False)
 
@@ -394,7 +422,7 @@ class Window(Ui_MainWindow):
         return (slicing_time,print_removal_time,support_removal_time,set_up_printer_time)
     
     def getFabricationCost(self):
-        human_time_cost = self.data.getPrinters('deprecation','name="human" AND id=1')[0][0]
+        human_time_cost = self.data.getConfig()['human_time_cost']
         human_time = sum(self.getHumanLaborInfo())
         printer = self.current_printers_CreateOrderUI[self.prippComboBox.currentIndex()]
         material_name = self.current_materials_CreateOrderUI[self.materialComboBox.currentIndex()][0]
@@ -517,14 +545,11 @@ def main():
 
     tmp.setupUi(win)
     win.show()
+
     app.exec_()
 
 
 if __name__ == '__main__':
-    a = AppData.Add()
-    app = QApplication([])
-    wid = QWidget()
-    Settings_window().setupUi(wid,a)
-    wid.show()
-    app.exec_()
-    #main()
+    
+
+    main()
