@@ -2,11 +2,13 @@
 
 # Form implementation generated from reading ui file 'settings.ui'
 #
-# Created by: PyQt5 UI code generator 5.10.1
+# Created by: PyQt5 UI code generator 5.14.1
 #
 # WARNING! All changes made in this file will be lost!
 
+
 from PyQt5 import QtCore, QtGui, QtWidgets
+
 
 class Ui_Form(object):
     def setupUi(self, Form):
@@ -89,4 +91,3 @@ class Ui_Form(object):
         self.precioDeTrabajoHumanoDoubleSpinBox.setSuffix(_translate("Form", " $/h"))
         self.pushButton.setText(_translate("Form", "Descartar"))
         self.pushButton_2.setText(_translate("Form", "Guardar cambios"))
-

@@ -1,17 +1,61 @@
 from UI.MainW import Ui_MainWindow
-from UI import _3dpricing_dialog, licence_dialog, source_code_dialog, settings
+from UI import settings, init_dialog, _3dpricing_dialog, licence_dialog, source_code_dialog
 from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, QWidget, QFileDialog
 from PyQt5.QtGui import QIntValidator
 
 import AppData
 
+class Init_window(init_dialog.Ui_Form):
+    def setupUi(self,qobject, add_object, mainw):
+        super().setupUi(qobject)
+        self.qobject = qobject
+        self.connect_all()
+        self.data = add_object
+        self.mainW = mainw
+
+        self.config = self.data.getConfig()
+        self.label_3.setText(self.config['path_to_data_base'])
+        self.label_4.setText(self.config['path_to_files_storage'])
+
+        
+        
+    def connect_all(self):
+        self.pushButton_2.clicked.connect(self.close_dialog)
+        self.pushButton.clicked.connect(self.save_config)
+        self.toolButton.clicked.connect(self.select_db_path)
+        self.toolButton_2.clicked.connect(self.select_order_files_path)
+
+    def save_config(self):
+        self.data.changeConfig(self.config)
+        self.close_dialog()
+
+    def select_db_path(self):
+        dir = str(QFileDialog.getExistingDirectory(self.qobject, "Select Directory"))
+
+        if dir != '':
+            self.label_3.setText(dir)
+            self.config['path_to_data_base'] = dir
+
+
+    def select_order_files_path(self):
+        dir = str(QFileDialog.getExistingDirectory(self.qobject, "Select Directory"))
+        if dir != '':
+            self.label_4.setText(dir)
+            self.config['path_to_files_storage'] = dir
+
+    def close_dialog(self):
+        self.data.setUp()
+        self.mainW.refreshUI()
+        self.qobject.close()
+
+
 class Settings_window(settings.Ui_Form):
-    def setupUi(self, qobject, add_object):
+    def setupUi(self, qobject, add_object, mainW):
         super().setupUi(qobject)
         self.qobject = qobject
         self.data = add_object
+        self.mainW = mainW
         self.connect_all()
-        
         self.updateValues()
 
     def updateValues(self):
@@ -36,11 +80,12 @@ class Settings_window(settings.Ui_Form):
         config['path_to_files_storage'] = self.label.text()
         config['human_time_cost'] = round(self.precioDeTrabajoHumanoDoubleSpinBox.value(), 2)
         self.data.changeConfig(config)
-
-        self.updateValues()
-        self.qobject.close()
+        self.data.setUp()
+        self.mainW.refreshUI()
+        self.close_dialog()
     
     def close_dialog(self):
+        self.updateValues()
         self.qobject.close()
 
     '''dialog para buscar carpeta de la base de datos'''
@@ -74,10 +119,15 @@ class Window(Ui_MainWindow):
         licence_dialog.Ui_Dialog().setupUi(self.licence_dialog)
         self.source_code_dialog = QDialog(MainWindow)
         source_code_dialog.Ui_Dialog().setupUi(self.source_code_dialog)
+        
+        self._init_dialog = Init_window()
+        self.init_dialog = QDialog(MainWindow)
+        self._init_dialog.setupUi(self.init_dialog,self.data, self)
+
 
         self.settings_window = QDialog(MainWindow)
         self.setupui = Settings_window()
-        self.setupui.setupUi(self.settings_window, self.data)
+        self.setupui.setupUi(self.settings_window, self.data, self)
 
         #CreateOrderUI
         '''impresoras en el combobox'''
@@ -125,6 +175,9 @@ class Window(Ui_MainWindow):
         self.stackedWidget.setCurrentIndex(0)
         self.stackedWidget_3.setCurrentIndex(0)
         self.stackedWidget_2.setCurrentIndex(1)
+
+    def run_init_config(self):
+        self.init_dialog.show()
 
     def connect_all(self):
         '''conecta todas las signals con sus slots'''
@@ -185,6 +238,7 @@ class Window(Ui_MainWindow):
 
 
     def refreshUI(self):
+        print('re')
         self.update_AddItem()
         self.update_EditDeleteUI()
         self.textEdit.blockSignals(True)
@@ -545,6 +599,7 @@ def main():
 
     tmp.setupUi(win)
     win.show()
+    tmp.run_init_config()
 
     app.exec_()
 

@@ -2,11 +2,13 @@
 
 # Form implementation generated from reading ui file 'licence_dialog.ui'
 #
-# Created by: PyQt5 UI code generator 5.10.1
+# Created by: PyQt5 UI code generator 5.14.1
 #
 # WARNING! All changes made in this file will be lost!
 
+
 from PyQt5 import QtCore, QtGui, QtWidgets
+
 
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
@@ -34,4 +36,3 @@ class Ui_Dialog(object):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
         self.label.setText(_translate("Dialog", "<html><head/><body><p><a href=\"https://github.com/LewisMojica/3DPricing/blob/master/LICENSE\"><span style=\" text-decoration: underline; color:#0000ff;\">GNU GENERAL PUBLIC LICENSE</span></a></p><p><a href=\"https://github.com/LewisMojica/3DPricing/blob/master/LICENSE\"><span style=\" text-decoration: underline; color:#0000ff;\">Version 3, 29 June 2007</span></a></p></body></html>"))
-

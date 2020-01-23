@@ -2,11 +2,13 @@
 
 # Form implementation generated from reading ui file 'source_code_dialog.ui'
 #
-# Created by: PyQt5 UI code generator 5.10.1
+# Created by: PyQt5 UI code generator 5.14.1
 #
 # WARNING! All changes made in this file will be lost!
 
+
 from PyQt5 import QtCore, QtGui, QtWidgets
+
 
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
@@ -43,4 +45,3 @@ class Ui_Dialog(object):
         Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
         self.label_2.setText(_translate("Dialog", "Código Fuente"))
         self.label.setText(_translate("Dialog", "<html><head/><body><p><a href=\"https://github.com/LewisMojica/3DPricing\"><span style=\" text-decoration: underline; color:#0000ff;\">https://github.com/LewisMojica/3DPricing</span></a></p></body></html>"))
-
