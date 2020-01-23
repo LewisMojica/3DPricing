@@ -46,6 +46,12 @@ class Init_window(init_dialog.Ui_Form):
     def close_dialog(self):
         self.data.setUp()
         self.mainW.refreshUI()
+        print(self.checkBox.checkState())
+        if self.checkBox.checkState() != 0:
+            config = self.data.getConfig()
+            config['init'] = False
+            self.data.changeConfig(config)
+
         self.qobject.close()
 
 
@@ -87,6 +93,7 @@ class Settings_window(settings.Ui_Form):
     def close_dialog(self):
         self.updateValues()
         self.qobject.close()
+        
 
     '''dialog para buscar carpeta de la base de datos'''
     def show_file_dialog_db(self):
@@ -177,7 +184,8 @@ class Window(Ui_MainWindow):
         self.stackedWidget_2.setCurrentIndex(1)
 
     def run_init_config(self):
-        self.init_dialog.show()
+        if self.data.getConfig()['init'] == True:
+            self.init_dialog.show()
 
     def connect_all(self):
         '''conecta todas las signals con sus slots'''
