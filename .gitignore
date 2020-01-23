@@ -11,3 +11,4 @@ dist/
 entry.spec
 *.ignore
 
+*.code-workspace

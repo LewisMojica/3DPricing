@@ -71,7 +71,6 @@ CREATE TABLE "human_time" (
     FOREIGN KEY(order_id) REFERENCES orders(id)
 );
 
-INSERT INTO printers (name, deprecation, default_electric_consumption) VALUES ("human",200, 0);
 INSERT INTO materials (name) VALUES ("pla");
 INSERT INTO materials (name) VALUES ("petg");
 INSERT INTO materials (name) VALUES ("abs");
