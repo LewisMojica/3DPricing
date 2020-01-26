@@ -13,7 +13,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
-        Form.resize(400, 300)
+        Form.resize(437, 300)
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(Form)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.label_2 = QtWidgets.QLabel(Form)
@@ -63,9 +63,6 @@ class Ui_Form(object):
         self.horizontalLayout_3.addWidget(self.checkBox)
         spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_3.addItem(spacerItem2)
-        self.pushButton_2 = QtWidgets.QPushButton(Form)
-        self.pushButton_2.setObjectName("pushButton_2")
-        self.horizontalLayout_3.addWidget(self.pushButton_2)
         self.pushButton = QtWidgets.QPushButton(Form)
         self.pushButton.setObjectName("pushButton")
         self.horizontalLayout_3.addWidget(self.pushButton)
@@ -86,5 +83,4 @@ class Ui_Form(object):
         self.toolButton_2.setText(_translate("Form", "..."))
         self.label.setText(_translate("Form", "<html><head/><body><p align=\"center\"><span style=\" font-size:10pt;\">3DPricing - </span><a href=\"https://github.com/LewisMojica/3DPricing/blob/master/LICENSE\"><span style=\" font-size:10pt; text-decoration: underline; color:#0000ff;\">GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007</span></a></p></body></html>"))
         self.checkBox.setText(_translate("Form", "No volver a mostrar"))
-        self.pushButton_2.setText(_translate("Form", "Omitir"))
-        self.pushButton.setText(_translate("Form", "Guardar configuración"))
+        self.pushButton.setText(_translate("Form", "Aceptar"))
