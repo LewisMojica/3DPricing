@@ -20,12 +20,13 @@ class Init_window(init_dialog.Ui_Form):
         
         
     def connect_all(self):
-        self.pushButton_2.clicked.connect(self.close_dialog)
         self.pushButton.clicked.connect(self.save_config)
         self.toolButton.clicked.connect(self.select_db_path)
         self.toolButton_2.clicked.connect(self.select_order_files_path)
+        self.qobject.finished.connect(self.close_dialog)
 
     def save_config(self):
+        self.qobject.setResult(1)
         self.data.changeConfig(self.config)
         self.close_dialog()
 
@@ -46,13 +47,12 @@ class Init_window(init_dialog.Ui_Form):
     def close_dialog(self):
         self.data.setUp()
         self.mainW.refreshUI()
-        print(self.checkBox.checkState())
-        if self.checkBox.checkState() != 0:
-            config = self.data.getConfig()
-            config['init'] = False
-            self.data.changeConfig(config)
-
+        config = self.data.getConfig()
+        config['init'] = not(self.checkBox.isChecked())
+        self.data.changeConfig(config)
+        self.qobject.blockSignals(True)
         self.qobject.close()
+        self.qobject.blockSignals(False)
 
 
 class Settings_window(settings.Ui_Form):
@@ -73,11 +73,14 @@ class Settings_window(settings.Ui_Form):
         
 
     def connect_all(self):
-        self.pushButton_2.clicked.connect(self.save_changes)
-        self.pushButton.clicked.connect(self.close_dialog)
+        self.pushButton_2.clicked.connect(self.qobject.accept)
+        self.pushButton.clicked.connect(self.qobject.reject)
 
         self.toolButton_2.clicked.connect(self.show_file_dialog_db)
         self.toolButton.clicked.connect(self.show_file_dialog_orders_files)
+
+        self.qobject.finished.connect(self.close_dialog)
+
 
     def save_changes(self):
         config = self.data.getConfig()
@@ -88,11 +91,8 @@ class Settings_window(settings.Ui_Form):
         self.data.changeConfig(config)
         self.data.setUp()
         self.mainW.refreshUI()
-        self.close_dialog()
     
-    def close_dialog(self):
-        self.updateValues()
-        self.qobject.close()
+
         
 
     '''dialog para buscar carpeta de la base de datos'''
@@ -103,8 +103,13 @@ class Settings_window(settings.Ui_Form):
     def show_file_dialog_orders_files(self):
         dir = QFileDialog.getExistingDirectory(self.qobject, "Select Directory")
         self.label.setText(str(dir))
-    
-        
+
+    def close_dialog(self):
+        result = self.qobject.result()
+        if  result == 1:
+            self.save_changes()
+        else:
+            self.updateValues()
 
 
 class Window(Ui_MainWindow):
@@ -185,7 +190,7 @@ class Window(Ui_MainWindow):
 
     def run_init_config(self):
         if self.data.getConfig()['init'] == True:
-            self.init_dialog.exec_()
+            self.init_dialog.open()
 
     def connect_all(self):
         '''conecta todas las signals con sus slots'''
@@ -230,9 +235,9 @@ class Window(Ui_MainWindow):
         self.carreteComboBox.currentIndexChanged.connect(self.refresh_EditDeleteUI)
 
         #menubar
-        self.actionLicence.triggered.connect(self.licence_dialog.show)
-        self.actionC_digo_Fuente.triggered.connect(self.source_code_dialog.show)
-        self.action3DPricing.triggered.connect(self._3dpricing_dialog.show)
+        self.actionLicence.triggered.connect(self.licence_dialog.open)
+        self.actionC_digo_Fuente.triggered.connect(self.source_code_dialog.open)
+        self.action3DPricing.triggered.connect(self._3dpricing_dialog.open)
 
         self.actionImpresora_2.triggered.connect(self.show_add_printer_ui)
         self.actionCliente_2.triggered.connect(self.show_add_customer_ui)
@@ -246,7 +251,6 @@ class Window(Ui_MainWindow):
 
 
     def refreshUI(self):
-        print('re')
         self.update_AddItem()
         self.update_EditDeleteUI()
         self.textEdit.blockSignals(True)
