@@ -5,8 +5,7 @@ class Add:
 
     def __init__(self):
         self.config = json.load(open('config.json'))
-        self.con_db = sqlite3.connect('database.sqlite3')
-        self.createTables()
+        self.setUp()
         
     def setUp(self):
         path_to_db = self.config['path_to_data_base']
