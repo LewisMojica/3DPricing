@@ -185,7 +185,7 @@ class Window(Ui_MainWindow):
 
     def run_init_config(self):
         if self.data.getConfig()['init'] == True:
-            self.init_dialog.show()
+            self.init_dialog.exec_()
 
     def connect_all(self):
         '''conecta todas las signals con sus slots'''
@@ -242,7 +242,7 @@ class Window(Ui_MainWindow):
         self.actionImpresora.triggered.connect(self.show_edit_printer_ui)
         self.actionCarretes.triggered.connect(self.show_edit_filament_ui)
         self.actionCliente.triggered.connect(self.show_edit_customer_ui)
-        self.actionPreferencias.triggered.connect(self.settings_window.show)
+        self.actionPreferencias.triggered.connect(self.settings_window.exec_)
 
 
     def refreshUI(self):
