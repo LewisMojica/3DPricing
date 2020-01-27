@@ -688,6 +688,7 @@ class Ui_MainWindow(object):
         self.action3DPricing = QtWidgets.QAction(MainWindow)
         self.action3DPricing.setObjectName("action3DPricing")
         self.actionOrden = QtWidgets.QAction(MainWindow)
+        self.actionOrden.setShortcutContext(QtCore.Qt.WindowShortcut)
         self.actionOrden.setObjectName("actionOrden")
         self.edit.addAction(self.actionImpresora)
         self.edit.addAction(self.actionCarretes)
@@ -834,4 +835,5 @@ class Ui_MainWindow(object):
         self.actionCarrete.setText(_translate("MainWindow", "Carrete"))
         self.action3DPricing.setText(_translate("MainWindow", "3DPricing"))
         self.actionOrden.setText(_translate("MainWindow", "Orden"))
+        self.actionOrden.setShortcut(_translate("MainWindow", "Ctrl+N"))
 import resources_rc

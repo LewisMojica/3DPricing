@@ -34,5 +34,5 @@ class Ui_Dialog(object):
 
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
-        Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
+        Dialog.setWindowTitle(_translate("Dialog", "Licencia"))
         self.label.setText(_translate("Dialog", "<html><head/><body><p><a href=\"https://github.com/LewisMojica/3DPricing/blob/master/LICENSE\"><span style=\" text-decoration: underline; color:#0000ff;\">GNU GENERAL PUBLIC LICENSE</span></a></p><p><a href=\"https://github.com/LewisMojica/3DPricing/blob/master/LICENSE\"><span style=\" text-decoration: underline; color:#0000ff;\">Version 3, 29 June 2007</span></a></p></body></html>"))
