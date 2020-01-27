@@ -5,10 +5,15 @@ from PyQt5.QtGui import QIntValidator
 
 import AppData
 
-class Init_window(init_dialog.Ui_Form):
-    def setupUi(self,qobject, add_object, mainw):
-        super().setupUi(qobject)
-        self.qobject = qobject
+
+class Init_window(init_dialog.Ui_Form, QDialog):
+    def __init__ (self, add_object, mainw, parent = None):
+        super().__init__(parent)
+        self.setupUi(add_object = add_object, mainw = mainw)
+        print('init')
+
+    def setupUi(self, add_object, mainw):
+        super().setupUi(self)
         self.connect_all()
         self.data = add_object
         self.mainW = mainw
@@ -23,15 +28,14 @@ class Init_window(init_dialog.Ui_Form):
         self.pushButton.clicked.connect(self.save_config)
         self.toolButton.clicked.connect(self.select_db_path)
         self.toolButton_2.clicked.connect(self.select_order_files_path)
-        self.qobject.finished.connect(self.close_dialog)
+        self.finished.connect(self.close_dialog)
 
     def save_config(self):
-        self.qobject.setResult(1)
         self.data.changeConfig(self.config)
-        self.close_dialog()
+        self.accept()
 
     def select_db_path(self):
-        dir = str(QFileDialog.getExistingDirectory(self.qobject, "Select Directory"))
+        dir = str(QFileDialog.getExistingDirectory(self, "Select Directory"))
 
         if dir != '':
             self.label_3.setText(dir)
@@ -39,26 +43,33 @@ class Init_window(init_dialog.Ui_Form):
 
 
     def select_order_files_path(self):
-        dir = str(QFileDialog.getExistingDirectory(self.qobject, "Select Directory"))
+        dir = str(QFileDialog.getExistingDirectory(self, "Select Directory"))
         if dir != '':
             self.label_4.setText(dir)
             self.config['path_to_files_storage'] = dir
 
     def close_dialog(self):
-        self.data.setUp()
-        self.mainW.refreshUI()
+        
         config = self.data.getConfig()
         config['init'] = not(self.checkBox.isChecked())
+
+        if self.result == 1:
+            config['path_to_data_base'] = self.label_3.text()
+            config['path_to_files_storage'] = self.label_4.text()
+            self.mainW.refreshUI()
+        
         self.data.changeConfig(config)
-        self.qobject.blockSignals(True)
-        self.qobject.close()
-        self.qobject.blockSignals(False)
+        self.data.setUp()
 
 
-class Settings_window(settings.Ui_Form):
-    def setupUi(self, qobject, add_object, mainW):
-        super().setupUi(qobject)
-        self.qobject = qobject
+
+class Settings_window(settings.Ui_Form, QDialog):
+    def __init__(self, add_object, mainW, parent = None):
+        super().__init__(parent)
+        self.setupUi(add_object, mainW)
+
+    def setupUi(self, add_object, mainW):
+        super().setupUi(self)
         self.data = add_object
         self.mainW = mainW
         self.connect_all()
@@ -73,13 +84,13 @@ class Settings_window(settings.Ui_Form):
         
 
     def connect_all(self):
-        self.pushButton_2.clicked.connect(self.qobject.accept)
-        self.pushButton.clicked.connect(self.qobject.reject)
+        self.pushButton_2.clicked.connect(self.accept)
+        self.pushButton.clicked.connect(self.reject)
 
         self.toolButton_2.clicked.connect(self.show_file_dialog_db)
         self.toolButton.clicked.connect(self.show_file_dialog_orders_files)
 
-        self.qobject.finished.connect(self.close_dialog)
+        self.finished.connect(self.close_dialog)
 
 
     def save_changes(self):
@@ -97,25 +108,28 @@ class Settings_window(settings.Ui_Form):
 
     '''dialog para buscar carpeta de la base de datos'''
     def show_file_dialog_db(self):
-        dir = QFileDialog.getExistingDirectory(self.qobject, "Select Directory")
+        dir = QFileDialog.getExistingDirectory(self, "Select Directory")
         self.label_2.setText(str(dir))
 
     def show_file_dialog_orders_files(self):
-        dir = QFileDialog.getExistingDirectory(self.qobject, "Select Directory")
+        dir = QFileDialog.getExistingDirectory(self, "Select Directory")
         self.label.setText(str(dir))
 
     def close_dialog(self):
-        result = self.qobject.result()
+        result = self.result()
         if  result == 1:
             self.save_changes()
         else:
             self.updateValues()
 
+    def open(self):
+        self.updateValues()
+        super().open()
+
 
 class Window(Ui_MainWindow):
     def setupUi(self, MainWindow):
         super().setupUi(MainWindow)
-
         only_int = (self.nMeroTelefNicoLineEdit, self.phoneNumberLineEdit)
         for i in only_int:
             i.setValidator(QIntValidator())
@@ -132,14 +146,8 @@ class Window(Ui_MainWindow):
         self.source_code_dialog = QDialog(MainWindow)
         source_code_dialog.Ui_Dialog().setupUi(self.source_code_dialog)
         
-        self._init_dialog = Init_window()
-        self.init_dialog = QDialog(MainWindow)
-        self._init_dialog.setupUi(self.init_dialog,self.data, self)
-
-
-        self.settings_window = QDialog(MainWindow)
-        self.setupui = Settings_window()
-        self.setupui.setupUi(self.settings_window, self.data, self)
+        self.init_dialog = Init_window(parent= MainWindow, add_object = self.data, mainw = self)
+        self.settings_window = Settings_window(add_object = self.data, mainW = self, parent = MainWindow)
 
         #CreateOrderUI
         '''impresoras en el combobox'''
@@ -247,7 +255,7 @@ class Window(Ui_MainWindow):
         self.actionImpresora.triggered.connect(self.show_edit_printer_ui)
         self.actionCarretes.triggered.connect(self.show_edit_filament_ui)
         self.actionCliente.triggered.connect(self.show_edit_customer_ui)
-        self.actionPreferencias.triggered.connect(self.settings_window.exec_)
+        self.actionPreferencias.triggered.connect(self.settings_window.open)
 
 
     def refreshUI(self):
