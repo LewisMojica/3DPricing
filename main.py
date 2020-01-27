@@ -1,9 +1,20 @@
 from UI.MainW import Ui_MainWindow
-from UI import settings, init_dialog, _3dpricing_dialog, licence_dialog, source_code_dialog
+from UI import settings, init_dialog, _3dpricing_dialog, licence_dialog, source_code_dialog, config_error
 from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, QWidget, QFileDialog
 from PyQt5.QtGui import QIntValidator
+import os
 
 import AppData
+
+class Config_error_dialog(config_error.Ui_Dialog, QDialog):
+    def __init__(self, parent = None):
+        super().__init__(parent = parent)
+        self.setupUi(self)
+    
+    def setupUi(self, dialog):
+        super().setupUi(dialog)
+
+        self.label_2.setText(f'{os.path.dirname(os.path.abspath(__file__))}/config.json')
 
 
 class Init_window(init_dialog.Ui_Form, QDialog):
@@ -135,8 +146,10 @@ class Window(Ui_MainWindow):
             i.setValidator(QIntValidator())
 
 
-        self.data = AppData.Add()
 
+        self.config_file_error_dialog = Config_error_dialog(MainWindow)
+
+        self.data = AppData.Add(self.config_file_error)
 
         #dialogs
         self._3dpricing_dialog = QDialog(MainWindow)
@@ -145,7 +158,8 @@ class Window(Ui_MainWindow):
         licence_dialog.Ui_Dialog().setupUi(self.licence_dialog)
         self.source_code_dialog = QDialog(MainWindow)
         source_code_dialog.Ui_Dialog().setupUi(self.source_code_dialog)
-        
+
+
         self.init_dialog = Init_window(parent= MainWindow, add_object = self.data, mainw = self)
         self.settings_window = Settings_window(add_object = self.data, mainW = self, parent = MainWindow)
 
@@ -555,7 +569,9 @@ class Window(Ui_MainWindow):
             self.spinBox_7.setValue(net_profit)
         self.spinBox_7.blockSignals(False)
 
-        
+    def config_file_error(self):
+        self.config_file_error_dialog.exec_()
+
     def select_add(self, i):
         self.stackedWidget_2.setCurrentIndex(i + 1)
 
