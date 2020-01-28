@@ -67,9 +67,9 @@ class Init_window(init_dialog.Ui_Form, QDialog):
 
     def create_db(self):
         db_path = QFileDialog.getSaveFileName(self)[0]
-        print(db_path)
+        print(type(db_path))
         if db_path != '':
-            config = self.data.getConfig
+            config = self.data.getConfig()
             config['path_to_data_base'] = db_path
             self.data.changeConfig(config)
 
@@ -116,6 +116,7 @@ class Settings_window(settings.Ui_Form, QDialog):
         self.toolButton.clicked.connect(self.show_file_dialog_orders_files)
 
         self.finished.connect(self.close_dialog)
+        self.pushButton_3.clicked.connect(self.create_db)
 
 
     def save_changes(self):
@@ -153,6 +154,12 @@ class Settings_window(settings.Ui_Form, QDialog):
             self.save_changes()
         else:
             self.updateValues()
+
+    def create_db(self):
+        db_path = QFileDialog.getSaveFileName(self)[0]
+        print(type(db_path))
+        if db_path != '':
+            self.label_2.setText(db_path)
 
     def open(self):
         self.updateValues()
