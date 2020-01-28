@@ -48,7 +48,7 @@ class Ui_Form(object):
         self.horizontalLayout_2.addWidget(self.toolButton_2)
         self.formLayout.setLayout(2, QtWidgets.QFormLayout.FieldRole, self.horizontalLayout_2)
         self.label_3 = QtWidgets.QLabel(Form)
-        self.label_3.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.label_3.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
         self.label_3.setObjectName("label_3")
         self.formLayout.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.label_3)
         self.label_4 = QtWidgets.QLabel(Form)

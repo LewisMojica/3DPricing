@@ -33,4 +33,4 @@ class Ui_Dialog(object):
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
-        self.label.setText(_translate("Dialog", "<html><head/><body><p align=\"center\">3DPricing v1.1</p></body></html>"))
+        self.label.setText(_translate("Dialog", "<html><head/><body><p align=\"center\">3DPricing v1.2</p></body></html>"))
