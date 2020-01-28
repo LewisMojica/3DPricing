@@ -2,7 +2,7 @@ from UI.MainW import Ui_MainWindow
 from UI import settings, init_dialog, _3dpricing_dialog, licence_dialog, source_code_dialog, config_error, invalid_file
 from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, QWidget, QFileDialog
 from PyQt5.QtGui import QIntValidator
-import os
+import os, sys
 
 import AppData
 
@@ -648,15 +648,16 @@ class Window(Ui_MainWindow):
 
 def main():
     
-    app = QApplication([])
+    app = QApplication(sys.argv)
+    app.setApplicationName("3DPricing")
+    app.setApplicationVersion('1.2')
     tmp = Window()
     win = QMainWindow()
-
     tmp.setupUi(win)
     win.show()
     tmp.run_init_config()
 
-    app.exec_()
+    sys.exit(app.exec_())
 
 
 if __name__ == '__main__':
