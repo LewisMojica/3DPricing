@@ -66,10 +66,12 @@ class Init_window(init_dialog.Ui_Form, QDialog):
         self.config['path_to_files_storage'] = dir
 
     def create_db(self):
-        db_path = str(QFileDialog.getSaveFileName(self))
-        config = self.data.getConfig
-        config['path_to_data_base'] = db_path
-        self.data.changeConfig(config)
+        db_path = QFileDialog.getSaveFileName(self)[0]
+        print(db_path)
+        if db_path != '':
+            config = self.data.getConfig
+            config['path_to_data_base'] = db_path
+            self.data.changeConfig(config)
 
     def close_dialog(self):
         
