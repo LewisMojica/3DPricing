@@ -17,6 +17,15 @@ class Add:
         with open('config.json') as config_file:
             self.config = json.load(config_file)
         self.setUp()
+
+    def isDataBase(self, db):
+        con_db = sqlite3.connect(db)
+        cur = con_db.execute('PRAGMA foreign_keys = ON;')
+        try:
+            cur.execute('SELECT name FROM sqlite_master WHERE type="table" ORDER BY name')
+            return True
+        except sqlite3.DatabaseError:
+            return False
         
     def createConfigFile(self):
         try:    
@@ -52,14 +61,10 @@ class Add:
         '''cambia las configuraciones a las especificadas con new_config'''
         with open('config.json','w') as config_file:
             json.dump(new_config, config_file, indent=4, sort_keys=True)
-        self.config = json.load(open('config.json'))
+        self.config = new_config
 
     def setUp(self):
         path_to_db = self.config['path_to_data_base']
-        if path_to_db[-1:] == '/':
-            path_to_db += 'database.sqlite3'
-        else:
-            path_to_db += '/database.sqlite3'
         print(path_to_db)
         self.con_db = sqlite3.connect(path_to_db)
         self.createTables()

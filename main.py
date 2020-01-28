@@ -1,5 +1,5 @@
 from UI.MainW import Ui_MainWindow
-from UI import settings, init_dialog, _3dpricing_dialog, licence_dialog, source_code_dialog, config_error
+from UI import settings, init_dialog, _3dpricing_dialog, licence_dialog, source_code_dialog, config_error, invalid_file
 from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, QWidget, QFileDialog
 from PyQt5.QtGui import QIntValidator
 import os
@@ -40,24 +40,36 @@ class Init_window(init_dialog.Ui_Form, QDialog):
         self.toolButton.clicked.connect(self.select_db_path)
         self.toolButton_2.clicked.connect(self.select_order_files_path)
         self.finished.connect(self.close_dialog)
+        self.pushButton_2.clicked.connect(self.create_db)
 
     def save_config(self):
         self.data.changeConfig(self.config)
         self.accept()
 
     def select_db_path(self):
-        dir = str(QFileDialog.getExistingDirectory(self, "Select Directory"))
-
-        if dir != '':
-            self.label_3.setText(dir)
+        dir = QFileDialog.getOpenFileName(self)[0]
+        if self.data.isDataBase(dir):
             self.config['path_to_data_base'] = dir
+            self.data.changeConfig(self.config)
+            self.label_3.setText(dir)
+        else:
+            tm = invalid_file.Ui_Dialog()
+            dialog = QDialog(self)
+            tm.setupUi(dialog)
+            dialog.open()
+        
 
 
     def select_order_files_path(self):
-        dir = str(QFileDialog.getExistingDirectory(self, "Select Directory"))
-        if dir != '':
-            self.label_4.setText(dir)
-            self.config['path_to_files_storage'] = dir
+        dir = str(QFileDialog.getExistingDirectory(self))
+        self.label_4.setText(dir)
+        self.config['path_to_files_storage'] = dir
+
+    def create_db(self):
+        db_path = str(QFileDialog.getSaveFileName(self))
+        config = self.data.getConfig
+        config['path_to_data_base'] = db_path
+        self.data.changeConfig(config)
 
     def close_dialog(self):
         
@@ -119,11 +131,18 @@ class Settings_window(settings.Ui_Form, QDialog):
 
     '''dialog para buscar carpeta de la base de datos'''
     def show_file_dialog_db(self):
-        dir = QFileDialog.getExistingDirectory(self, "Select Directory")
-        self.label_2.setText(str(dir))
+        dir = QFileDialog.getOpenFileName(self)[0]
+
+        if self.data.isDataBase(dir):
+            self.label_2.setText(dir)
+        else:
+            tm = invalid_file.Ui_Dialog()
+            dialog = QDialog(self)
+            tm.setupUi(dialog)
+            dialog.open()
 
     def show_file_dialog_orders_files(self):
-        dir = QFileDialog.getExistingDirectory(self, "Select Directory")
+        dir = QFileDialog.getExistingDirectory(self)
         self.label.setText(str(dir))
 
     def close_dialog(self):
