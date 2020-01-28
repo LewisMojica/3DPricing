@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>399</width>
+    <width>411</width>
     <height>298</height>
    </rect>
   </property>
@@ -136,7 +136,7 @@
      <item row="5" column="1">
       <layout class="QHBoxLayout" name="horizontalLayout_5">
        <item>
-        <widget class="QDoubleSpinBox" name="doubleSpinBox_2">
+        <widget class="QDoubleSpinBox" name="precioDeTrabajoHumanoDoubleSpinBox">
          <property name="suffix">
           <string>$</string>
          </property>

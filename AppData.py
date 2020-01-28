@@ -8,7 +8,7 @@ class Add:
     "electricity_cost": 15.0,
     "human_time_cost": 200.0,
     "init": True,
-    "path_to_data_base": '.',
+    "path_to_data_base": 'database.sqlite3',
     "path_to_files_storage": '.',
     "time_offset":  0
     }
