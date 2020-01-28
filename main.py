@@ -36,21 +36,22 @@ class Init_window(init_dialog.Ui_Form, QDialog):
         
         
     def connect_all(self):
-        self.pushButton.clicked.connect(self.save_config)
+        self.pushButton.clicked.connect(self.accept)
         self.toolButton.clicked.connect(self.select_db_path)
         self.toolButton_2.clicked.connect(self.select_order_files_path)
         self.finished.connect(self.close_dialog)
         self.pushButton_2.clicked.connect(self.create_db)
 
     def save_config(self):
+        config = self.data.getConfig()
+        config['path_to_data_base'] = self.label_3.text()
+        config['path_to_files_storage'] = self.label_4.text()
         self.data.changeConfig(self.config)
-        self.accept()
 
     def select_db_path(self):
         dir = QFileDialog.getOpenFileName(self)[0]
         if self.data.isDataBase(dir):
             self.config['path_to_data_base'] = dir
-            self.data.changeConfig(self.config)
             self.label_3.setText(dir)
         else:
             tm = invalid_file.Ui_Dialog()
@@ -75,16 +76,14 @@ class Init_window(init_dialog.Ui_Form, QDialog):
 
     def close_dialog(self):
         
+        if self.result() == 1:
+            self.save_config()
         config = self.data.getConfig()
         config['init'] = not(self.checkBox.isChecked())
-
-        if self.result == 1:
-            config['path_to_data_base'] = self.label_3.text()
-            config['path_to_files_storage'] = self.label_4.text()
-            self.mainW.refreshUI()
         
         self.data.changeConfig(config)
         self.data.setUp()
+        self.mainW.refreshUI()
 
 
 
