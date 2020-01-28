@@ -20,16 +20,18 @@ class Add:
         
     def createConfigFile(self):
         try:    
-            try:
-                with open('config.json','r+') as config_file:
-                    config_dict = json.load(config_file)
-            except:
-                self.config_file_fail()
-                with open('config.json','r+') as config_file:
-                    config_dict = json.load(config_file)
+            
+            with open('config.json','r+') as config_file:
+                config_dict = json.load(config_file)
+        
+            
         except FileNotFoundError:
             with open('config.json','w+') as config_file:
                 config_dict = {}
+        except json.decoder.JSONDecodeError:
+            self.config_file_fail()
+            with open('config.json','r+') as config_file:
+                config_dict = json.load(config_file)
         print(config_dict)
         for key in self.config_default:
             try:
