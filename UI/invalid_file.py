@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '_3dpricing_dialog.ui'
+# Form implementation generated from reading ui file 'invalid_file.ui'
 #
 # Created by: PyQt5 UI code generator 5.14.1
 #
@@ -33,4 +33,4 @@ class Ui_Dialog(object):
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
-        self.label.setText(_translate("Dialog", "<html><head/><body><p align=\"center\">3DPricing v1.2</p></body></html>"))
+        self.label.setText(_translate("Dialog", "<html><head/><body><p align=\"center\">El archivo seleccionado no es compatible</p></body></html>"))

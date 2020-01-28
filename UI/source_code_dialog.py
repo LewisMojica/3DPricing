@@ -22,12 +22,6 @@ class Ui_Dialog(object):
         self.label_2.setAlignment(QtCore.Qt.AlignCenter)
         self.label_2.setObjectName("label_2")
         self.verticalLayout.addWidget(self.label_2)
-        self.label = QtWidgets.QLabel(Dialog)
-        self.label.setTextFormat(QtCore.Qt.RichText)
-        self.label.setAlignment(QtCore.Qt.AlignCenter)
-        self.label.setOpenExternalLinks(True)
-        self.label.setObjectName("label")
-        self.verticalLayout.addWidget(self.label)
         self.verticalLayout_2.addLayout(self.verticalLayout)
         self.buttonBox = QtWidgets.QDialogButtonBox(Dialog)
         self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
@@ -42,6 +36,5 @@ class Ui_Dialog(object):
 
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
-        Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
-        self.label_2.setText(_translate("Dialog", "Código Fuente"))
-        self.label.setText(_translate("Dialog", "<html><head/><body><p><a href=\"https://github.com/LewisMojica/3DPricing\"><span style=\" text-decoration: underline; color:#0000ff;\">https://github.com/LewisMojica/3DPricing</span></a></p></body></html>"))
+        Dialog.setWindowTitle(_translate("Dialog", "Repositorio"))
+        self.label_2.setText(_translate("Dialog", "<html><head/><body><p align=\"center\"><span style=\" font-size:14pt; font-weight:600;\">Código Fuente:</span><br/></p><p align=\"center\"><a href=\"https://github.com/LewisMojica/3DPricing\"><span style=\" text-decoration: underline; color:#0000ff;\">https://github.com/LewisMojica/3DPricing</span></a></p></body></html>"))

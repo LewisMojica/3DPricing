@@ -1,14 +1,30 @@
 from UI.MainW import Ui_MainWindow
-from UI import settings, init_dialog, _3dpricing_dialog, licence_dialog, source_code_dialog
+from UI import settings, init_dialog, _3dpricing_dialog, licence_dialog, source_code_dialog, config_error, invalid_file
 from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, QWidget, QFileDialog
 from PyQt5.QtGui import QIntValidator
+import os, sys
 
 import AppData
 
-class Init_window(init_dialog.Ui_Form):
-    def setupUi(self,qobject, add_object, mainw):
-        super().setupUi(qobject)
-        self.qobject = qobject
+class Config_error_dialog(config_error.Ui_Dialog, QDialog):
+    def __init__(self, parent = None):
+        super().__init__(parent = parent)
+        self.setupUi(self)
+    
+    def setupUi(self, dialog):
+        super().setupUi(dialog)
+
+        self.label_2.setText(f'{os.path.dirname(os.path.abspath(__file__))}/config.json')
+
+
+class Init_window(init_dialog.Ui_Form, QDialog):
+    def __init__ (self, add_object, mainw, parent = None):
+        super().__init__(parent)
+        self.setupUi(add_object = add_object, mainw = mainw)
+        print('init')
+
+    def setupUi(self, add_object, mainw):
+        super().setupUi(self)
         self.connect_all()
         self.data = add_object
         self.mainW = mainw
@@ -20,45 +36,63 @@ class Init_window(init_dialog.Ui_Form):
         
         
     def connect_all(self):
-        self.pushButton_2.clicked.connect(self.close_dialog)
         self.pushButton.clicked.connect(self.save_config)
         self.toolButton.clicked.connect(self.select_db_path)
         self.toolButton_2.clicked.connect(self.select_order_files_path)
+        self.finished.connect(self.close_dialog)
+        self.pushButton_2.clicked.connect(self.create_db)
 
     def save_config(self):
         self.data.changeConfig(self.config)
-        self.close_dialog()
+        self.accept()
 
     def select_db_path(self):
-        dir = str(QFileDialog.getExistingDirectory(self.qobject, "Select Directory"))
-
-        if dir != '':
-            self.label_3.setText(dir)
+        dir = QFileDialog.getOpenFileName(self)[0]
+        if self.data.isDataBase(dir):
             self.config['path_to_data_base'] = dir
+            self.data.changeConfig(self.config)
+            self.label_3.setText(dir)
+        else:
+            tm = invalid_file.Ui_Dialog()
+            dialog = QDialog(self)
+            tm.setupUi(dialog)
+            dialog.open()
+        
 
 
     def select_order_files_path(self):
-        dir = str(QFileDialog.getExistingDirectory(self.qobject, "Select Directory"))
-        if dir != '':
-            self.label_4.setText(dir)
-            self.config['path_to_files_storage'] = dir
+        dir = str(QFileDialog.getExistingDirectory(self))
+        self.label_4.setText(dir)
+        self.config['path_to_files_storage'] = dir
+
+    def create_db(self):
+        db_path = str(QFileDialog.getSaveFileName(self))
+        config = self.data.getConfig
+        config['path_to_data_base'] = db_path
+        self.data.changeConfig(config)
 
     def close_dialog(self):
+        
+        config = self.data.getConfig()
+        config['init'] = not(self.checkBox.isChecked())
+
+        if self.result == 1:
+            config['path_to_data_base'] = self.label_3.text()
+            config['path_to_files_storage'] = self.label_4.text()
+            self.mainW.refreshUI()
+        
+        self.data.changeConfig(config)
         self.data.setUp()
-        self.mainW.refreshUI()
-        print(self.checkBox.checkState())
-        if self.checkBox.checkState() != 0:
-            config = self.data.getConfig()
-            config['init'] = False
-            self.data.changeConfig(config)
-
-        self.qobject.close()
 
 
-class Settings_window(settings.Ui_Form):
-    def setupUi(self, qobject, add_object, mainW):
-        super().setupUi(qobject)
-        self.qobject = qobject
+
+class Settings_window(settings.Ui_Form, QDialog):
+    def __init__(self, add_object, mainW, parent = None):
+        super().__init__(parent)
+        self.setupUi(add_object, mainW)
+
+    def setupUi(self, add_object, mainW):
+        super().setupUi(self)
         self.data = add_object
         self.mainW = mainW
         self.connect_all()
@@ -73,11 +107,14 @@ class Settings_window(settings.Ui_Form):
         
 
     def connect_all(self):
-        self.pushButton_2.clicked.connect(self.save_changes)
-        self.pushButton.clicked.connect(self.close_dialog)
+        self.pushButton_2.clicked.connect(self.accept)
+        self.pushButton.clicked.connect(self.reject)
 
         self.toolButton_2.clicked.connect(self.show_file_dialog_db)
         self.toolButton.clicked.connect(self.show_file_dialog_orders_files)
+
+        self.finished.connect(self.close_dialog)
+
 
     def save_changes(self):
         config = self.data.getConfig()
@@ -88,36 +125,50 @@ class Settings_window(settings.Ui_Form):
         self.data.changeConfig(config)
         self.data.setUp()
         self.mainW.refreshUI()
-        self.close_dialog()
     
-    def close_dialog(self):
-        self.updateValues()
-        self.qobject.close()
+
         
 
     '''dialog para buscar carpeta de la base de datos'''
     def show_file_dialog_db(self):
-        dir = QFileDialog.getExistingDirectory(self.qobject, "Select Directory")
-        self.label_2.setText(str(dir))
+        dir = QFileDialog.getOpenFileName(self)[0]
+
+        if self.data.isDataBase(dir):
+            self.label_2.setText(dir)
+        else:
+            tm = invalid_file.Ui_Dialog()
+            dialog = QDialog(self)
+            tm.setupUi(dialog)
+            dialog.open()
 
     def show_file_dialog_orders_files(self):
-        dir = QFileDialog.getExistingDirectory(self.qobject, "Select Directory")
+        dir = QFileDialog.getExistingDirectory(self)
         self.label.setText(str(dir))
-    
-        
+
+    def close_dialog(self):
+        result = self.result()
+        if  result == 1:
+            self.save_changes()
+        else:
+            self.updateValues()
+
+    def open(self):
+        self.updateValues()
+        super().open()
 
 
 class Window(Ui_MainWindow):
     def setupUi(self, MainWindow):
         super().setupUi(MainWindow)
-
         only_int = (self.nMeroTelefNicoLineEdit, self.phoneNumberLineEdit)
         for i in only_int:
             i.setValidator(QIntValidator())
 
 
-        self.data = AppData.Add()
 
+        self.config_file_error_dialog = Config_error_dialog(MainWindow)
+
+        self.data = AppData.Add(self.config_file_error)
 
         #dialogs
         self._3dpricing_dialog = QDialog(MainWindow)
@@ -126,15 +177,10 @@ class Window(Ui_MainWindow):
         licence_dialog.Ui_Dialog().setupUi(self.licence_dialog)
         self.source_code_dialog = QDialog(MainWindow)
         source_code_dialog.Ui_Dialog().setupUi(self.source_code_dialog)
-        
-        self._init_dialog = Init_window()
-        self.init_dialog = QDialog(MainWindow)
-        self._init_dialog.setupUi(self.init_dialog,self.data, self)
 
 
-        self.settings_window = QDialog(MainWindow)
-        self.setupui = Settings_window()
-        self.setupui.setupUi(self.settings_window, self.data, self)
+        self.init_dialog = Init_window(parent= MainWindow, add_object = self.data, mainw = self)
+        self.settings_window = Settings_window(add_object = self.data, mainW = self, parent = MainWindow)
 
         #CreateOrderUI
         '''impresoras en el combobox'''
@@ -185,7 +231,7 @@ class Window(Ui_MainWindow):
 
     def run_init_config(self):
         if self.data.getConfig()['init'] == True:
-            self.init_dialog.exec_()
+            self.init_dialog.open()
 
     def connect_all(self):
         '''conecta todas las signals con sus slots'''
@@ -230,9 +276,9 @@ class Window(Ui_MainWindow):
         self.carreteComboBox.currentIndexChanged.connect(self.refresh_EditDeleteUI)
 
         #menubar
-        self.actionLicence.triggered.connect(self.licence_dialog.show)
-        self.actionC_digo_Fuente.triggered.connect(self.source_code_dialog.show)
-        self.action3DPricing.triggered.connect(self._3dpricing_dialog.show)
+        self.actionLicence.triggered.connect(self.licence_dialog.open)
+        self.actionC_digo_Fuente.triggered.connect(self.source_code_dialog.open)
+        self.action3DPricing.triggered.connect(self._3dpricing_dialog.open)
 
         self.actionImpresora_2.triggered.connect(self.show_add_printer_ui)
         self.actionCliente_2.triggered.connect(self.show_add_customer_ui)
@@ -242,11 +288,10 @@ class Window(Ui_MainWindow):
         self.actionImpresora.triggered.connect(self.show_edit_printer_ui)
         self.actionCarretes.triggered.connect(self.show_edit_filament_ui)
         self.actionCliente.triggered.connect(self.show_edit_customer_ui)
-        self.actionPreferencias.triggered.connect(self.settings_window.exec_)
+        self.actionPreferencias.triggered.connect(self.settings_window.open)
 
 
     def refreshUI(self):
-        print('re')
         self.update_AddItem()
         self.update_EditDeleteUI()
         self.textEdit.blockSignals(True)
@@ -543,7 +588,9 @@ class Window(Ui_MainWindow):
             self.spinBox_7.setValue(net_profit)
         self.spinBox_7.blockSignals(False)
 
-        
+    def config_file_error(self):
+        self.config_file_error_dialog.exec_()
+
     def select_add(self, i):
         self.stackedWidget_2.setCurrentIndex(i + 1)
 
@@ -601,15 +648,16 @@ class Window(Ui_MainWindow):
 
 def main():
     
-    app = QApplication([])
+    app = QApplication(sys.argv)
+    app.setApplicationName("3DPricing")
+    app.setApplicationVersion('1.2')
     tmp = Window()
     win = QMainWindow()
-
     tmp.setupUi(win)
     win.show()
     tmp.run_init_config()
 
-    app.exec_()
+    sys.exit(app.exec_())
 
 
 if __name__ == '__main__':

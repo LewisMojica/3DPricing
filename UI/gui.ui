@@ -1461,6 +1461,12 @@
    <property name="text">
     <string>Orden</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::WindowShortcut</enum>
+   </property>
   </action>
  </widget>
  <resources>

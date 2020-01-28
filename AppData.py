@@ -3,16 +3,68 @@ import sqlite3, json, time
 class Add:
     '''Esta clase contiene funciones para agregar impresora, filamentor e impresiones a la base de datos'''
 
-    def __init__(self):
-        self.config = json.load(open('config.json'))
+    def __init__(self, config_file_fail):
+        self.config_default = {
+    "electricity_cost": 15.0,
+    "human_time_cost": 200.0,
+    "init": True,
+    "path_to_data_base": '.',
+    "path_to_files_storage": '.',
+    "time_offset":  0
+    }
+        self.config_file_fail = config_file_fail 
+        self.createConfigFile()
+        with open('config.json') as config_file:
+            self.config = json.load(config_file)
         self.setUp()
+
+    def isDataBase(self, db):
+        con_db = sqlite3.connect(db)
+        cur = con_db.execute('PRAGMA foreign_keys = ON;')
+        try:
+            cur.execute('SELECT name FROM sqlite_master WHERE type="table" ORDER BY name')
+            return True
+        except sqlite3.DatabaseError:
+            return False
         
+    def createConfigFile(self):
+        try:    
+            
+            with open('config.json','r+') as config_file:
+                config_dict = json.load(config_file)
+        
+            
+        except FileNotFoundError:
+            with open('config.json','w+') as config_file:
+                config_dict = {}
+        except json.decoder.JSONDecodeError:
+            self.config_file_fail()
+            with open('config.json','r+') as config_file:
+                config_dict = json.load(config_file)
+        print(config_dict)
+        for key in self.config_default:
+            try:
+                if type(config_dict[key]) == type(self.config_default[key]):
+                    print(f'{key} -> ok')
+                else:
+                    config_dict[key] = self.config_default[key]
+                    print(f'{key} -> bad')
+            except KeyError:
+                config_dict[key] = self.config_default[key]
+        self.changeConfig(config_dict)
+
+    def getConfig (self):
+        '''retorna el dict generado apartir de config.json'''
+        return self.config
+
+    def changeConfig(self, new_config):
+        '''cambia las configuraciones a las especificadas con new_config'''
+        with open('config.json','w') as config_file:
+            json.dump(new_config, config_file, indent=4, sort_keys=True)
+        self.config = new_config
+
     def setUp(self):
         path_to_db = self.config['path_to_data_base']
-        if path_to_db[-1:] == '/':
-            path_to_db += 'database.sqlite3'
-        else:
-            path_to_db += '/database.sqlite3'
         print(path_to_db)
         self.con_db = sqlite3.connect(path_to_db)
         self.createTables()
@@ -58,15 +110,6 @@ class Add:
         cur.close()
         return result
 
-    def getConfig (self):
-        '''retorna el dict generado apartir de config.json'''
-        return self.config
-
-    def changeConfig(self, new_config):
-        '''cambia las configuraciones a las especificadas con new_config'''
-        with open('config.json','w') as config_file:
-            json.dump(new_config, config_file, indent=4, sort_keys=True)
-        self.config = json.load(open('config.json'))
 
     def updateRecords(self,table,values,where):
         cur = self.getCursor()
@@ -210,5 +253,7 @@ class Add:
         self.deleteRecords('filaments',f'id={id}')
 
 if __name__ == '__main__':
-    pass
+    def fail():
+        print('fail')
+    dat = Add(fail)
     
