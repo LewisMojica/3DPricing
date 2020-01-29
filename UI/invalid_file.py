@@ -32,5 +32,5 @@ class Ui_Dialog(object):
 
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
-        Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
+        Dialog.setWindowTitle(_translate("Dialog", "Error"))
         self.label.setText(_translate("Dialog", "<html><head/><body><p align=\"center\">El archivo seleccionado no es compatible</p></body></html>"))
